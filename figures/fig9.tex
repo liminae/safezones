@@ -1,0 +1,222 @@
+\resizebox{\columnwidth}{!}{
+\begin{tikzpicture}
+\tikzset{every node/.style={font=\fontsize{8}{9}\selectfont}}
+\draw[RoyalBlue,line width=0.8pt] (0,15.30)--(0.4,15.30);
+\node[anchor=west] at (0.48,15.30) {Fixed $b=3$};
+\draw[ForestGreen,dashed,line width=0.8pt] (3.35,15.30)--(3.75,15.30);
+\node[anchor=west] at (3.83,15.30) {Matching $b=|\delta(R)|$};
+\fill[black!70] (0.20,14.92) circle (1.5pt);
+\node[anchor=west] at (0.48,14.92) {Seed 0};
+\draw[black!70] (1.80,14.87) rectangle (1.90,14.97);
+\node[anchor=west] at (2.08,14.92) {Seed 1};
+\node[diamond,fill=black,inner sep=1.4pt] at (3.95,14.92) {};
+\node[anchor=west] at (4.20,14.92) {Measured baseline};
+\node[anchor=west,font=\fontsize{7}{8}\selectfont,text=black!70] at (0,14.55) {OPT: expected protected airports under a uniform source};
+\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0,14.15) {(a) R internal connectivity};
+\begin{axis}[
+at={(0.95cm,11.780000000000001cm)},
+anchor=south west,
+scale only axis,
+width=6.55cm,
+height=2.05cm,
+axis lines=left,
+axis line style={black!80,line width=0.5pt},
+tick style={black!70,line width=0.4pt},
+tick label style={font=\fontsize{8}{9}\selectfont},
+label style={font=\fontsize{8}{9}\selectfont},
+ymajorgrids=true,
+grid style={black!10,line width=0.3pt},
+xmin=8.55,
+xmax=36.45,
+ymin=0,
+ymax=27,
+ytick={0,10,20},
+xtick={9,15,21,27,30,33,36},
+ylabel={Exact OPT},
+clip=false,
+scaled ticks=false,
+/pgf/number format/fixed,
+/pgf/number format/precision=2,
+xticklabels={},
+xtick style={draw=none}
+]
+\draw[black!35,densely dotted,line width=0.5pt] (axis cs:30,0)--(axis cs:30,27);
+\node[anchor=west,font=\fontsize{7}{8}\selectfont,text=black!65] at (axis cs:10,5) {At 15 edges: seed gap $=16/443$};
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(9,17.634311512415) (15,17.634311512415) (21,17.634311512415) (27,17.634311512415) (30,17.634311512415) (33,17.634311512415) (36,17.634311512415)};
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(9,19.625282167043) (15,17.670428893905) (21,17.634311512415) (27,17.634311512415) (30,17.634311512415) (33,17.634311512415) (36,17.634311512415)};
+\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(30,17.634311512415)};
+\end{axis}
+\begin{axis}[
+at={(0.95cm,10.38cm)},
+anchor=south west,
+scale only axis,
+width=6.55cm,
+height=1.12cm,
+axis lines=left,
+axis line style={black!80,line width=0.5pt},
+tick style={black!70,line width=0.4pt},
+tick label style={font=\fontsize{8}{9}\selectfont},
+label style={font=\fontsize{8}{9}\selectfont},
+ymajorgrids=true,
+grid style={black!10,line width=0.3pt},
+xmin=8.55,
+xmax=36.45,
+ymin=-0.06,
+ymax=1.1,
+ytick={0,0.5,1},
+xtick={9,15,21,27,30,33,36},
+ylabel={BC/OPT},
+clip=false,
+scaled ticks=false,
+/pgf/number format/fixed,
+/pgf/number format/precision=2,
+xlabel={Internal edges in $R$},
+xlabel style={yshift=1pt}
+]
+\draw[black!35,densely dotted,line width=0.5pt] (axis cs:30,0)--(axis cs:30,1.1);
+\draw[black!25,line width=0.4pt] (axis cs:8.55,1)--(axis cs:36.45,1);
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(9,0) (15,0) (21,0) (27,0) (30,0) (33,0) (36,0)};
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(9,0.80055210489993) (15,0) (21,0) (27,0) (30,0) (33,0) (36,0)};
+\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(30,0)};
+\end{axis}
+\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0,9.25) {(b) R boundary width};
+\begin{axis}[
+at={(0.95cm,6.88cm)},
+anchor=south west,
+scale only axis,
+width=6.55cm,
+height=2.05cm,
+axis lines=left,
+axis line style={black!80,line width=0.5pt},
+tick style={black!70,line width=0.4pt},
+tick label style={font=\fontsize{8}{9}\selectfont},
+label style={font=\fontsize{8}{9}\selectfont},
+ymajorgrids=true,
+grid style={black!10,line width=0.3pt},
+xmin=0.87,
+xmax=6.13,
+ymin=0,
+ymax=27,
+ytick={0,10,20},
+xtick={1,2,3,4,5,6},
+ylabel={Exact OPT},
+clip=false,
+scaled ticks=false,
+/pgf/number format/fixed,
+/pgf/number format/precision=2,
+xticklabels={},
+xtick style={draw=none}
+]
+\draw[black!35,densely dotted,line width=0.5pt] (axis cs:3,0)--(axis cs:3,27);
+\fill[black,opacity=0.035] (axis cs:3.5,0) rectangle (axis cs:6.13,27);
+\node[anchor=north,font=\fontsize{7}{8}\selectfont,text=black!65] at (axis cs:4.8,26.7) {$R$ infeasible at $b=3$};
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(1,21.539503386005) (2,19.589164785553) (3,17.634311512415) (4,5.9729119638826) (5,5.9729119638826) (6,5.9729119638826)};
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(1,21.539503386005) (2,19.589164785553) (3,17.634311512415) (4,5.9729119638826) (5,5.9729119638826) (6,5.9729119638826)};
+\addplot[color=ForestGreen,dashed,line width=0.6pt,mark=square,mark size=1.7pt,mark options={solid}] coordinates {(1,17.634311512415) (2,17.634311512415) (3,17.634311512415) (4,17.634311512415) (5,17.634311512415) (6,25.237020316027)};
+\addplot[color=ForestGreen,dashed,line width=0.6pt,mark=*,mark size=0.7pt,mark options={solid}] coordinates {(1,17.634311512415) (2,17.634311512415) (3,17.634311512415) (4,17.634311512415) (5,17.634311512415) (6,25.237020316027)};
+\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(3,17.634311512415)};
+\end{axis}
+\begin{axis}[
+at={(0.95cm,5.48cm)},
+anchor=south west,
+scale only axis,
+width=6.55cm,
+height=1.12cm,
+axis lines=left,
+axis line style={black!80,line width=0.5pt},
+tick style={black!70,line width=0.4pt},
+tick label style={font=\fontsize{8}{9}\selectfont},
+label style={font=\fontsize{8}{9}\selectfont},
+ymajorgrids=true,
+grid style={black!10,line width=0.3pt},
+xmin=0.87,
+xmax=6.13,
+ymin=-0.06,
+ymax=1.1,
+ytick={0,0.5,1},
+xtick={1,2,3,4,5,6},
+ylabel={BC/OPT},
+clip=false,
+scaled ticks=false,
+/pgf/number format/fixed,
+/pgf/number format/precision=2,
+xlabel={$|\delta(R)|$},
+xlabel style={yshift=1pt}
+]
+\draw[black!35,densely dotted,line width=0.5pt] (axis cs:3,0)--(axis cs:3,1.1);
+\draw[black!25,line width=0.4pt] (axis cs:0.87,1)--(axis cs:6.13,1);
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(1,0.81869629008594) (2,0) (3,0) (4,0) (5,0) (6,0)};
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(1,0.81869629008594) (2,0) (3,0) (4,0) (5,0) (6,0)};
+\addplot[color=ForestGreen,dashed,line width=0.6pt,mark=square,mark size=1.7pt,mark options={solid}] coordinates {(1,1) (2,0) (3,0) (4,0) (5,0) (6,0)};
+\addplot[color=ForestGreen,dashed,line width=0.6pt,mark=*,mark size=0.7pt,mark options={solid}] coordinates {(1,0) (2,0) (3,0) (4,0) (5,0) (6,0)};
+\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(3,0)};
+\end{axis}
+\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0,4.35) {(c) U boundary width};
+\begin{axis}[
+at={(0.95cm,1.9799999999999995cm)},
+anchor=south west,
+scale only axis,
+width=6.55cm,
+height=2.05cm,
+axis lines=left,
+axis line style={black!80,line width=0.5pt},
+tick style={black!70,line width=0.4pt},
+tick label style={font=\fontsize{8}{9}\selectfont},
+label style={font=\fontsize{8}{9}\selectfont},
+ymajorgrids=true,
+grid style={black!10,line width=0.3pt},
+xmin=2.87,
+xmax=9.13,
+ymin=0,
+ymax=27,
+ytick={0,10,20},
+xtick={3,4,5,6,7,8,9},
+ylabel={Exact OPT},
+clip=false,
+scaled ticks=false,
+/pgf/number format/fixed,
+/pgf/number format/precision=2,
+xticklabels={},
+xtick style={draw=none}
+]
+\draw[black!35,densely dotted,line width=0.5pt] (axis cs:6,0)--(axis cs:6,27);
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(3,25.237020316027) (4,17.634311512415) (5,17.634311512415) (6,17.634311512415) (7,17.634311512415) (8,17.634311512415) (9,17.634311512415)};
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(3,25.237020316027) (4,17.634311512415) (5,17.634311512415) (6,17.634311512415) (7,17.634311512415) (8,17.634311512415) (9,17.634311512415)};
+\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(6,17.634311512415)};
+\end{axis}
+\begin{axis}[
+at={(0.95cm,0.5799999999999996cm)},
+anchor=south west,
+scale only axis,
+width=6.55cm,
+height=1.12cm,
+axis lines=left,
+axis line style={black!80,line width=0.5pt},
+tick style={black!70,line width=0.4pt},
+tick label style={font=\fontsize{8}{9}\selectfont},
+label style={font=\fontsize{8}{9}\selectfont},
+ymajorgrids=true,
+grid style={black!10,line width=0.3pt},
+xmin=2.87,
+xmax=9.13,
+ymin=-0.06,
+ymax=1.1,
+ytick={0,0.5,1},
+xtick={3,4,5,6,7,8,9},
+ylabel={BC/OPT},
+clip=false,
+scaled ticks=false,
+/pgf/number format/fixed,
+/pgf/number format/precision=2,
+xlabel={$|\delta(U)|$},
+xlabel style={yshift=1pt}
+]
+\draw[black!35,densely dotted,line width=0.5pt] (axis cs:6,0)--(axis cs:6,1.1);
+\draw[black!25,line width=0.4pt] (axis cs:2.87,1)--(axis cs:9.13,1);
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(3,0) (4,0) (5,0) (6,0) (7,0) (8,0) (9,0)};
+\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(3,0) (4,0) (5,0) (6,0) (7,0) (8,0) (9,0)};
+\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(6,0)};
+\end{axis}
+\node[anchor=west,font=\fontsize{7}{8}\selectfont] at (0,-0.40) {BC is zero in 40 of 44 cases; all non-baseline graphs are synthetic.};
+\end{tikzpicture}
+}
