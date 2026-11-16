@@ -1,222 +1,128 @@
-\resizebox{\columnwidth}{!}{
-\begin{tikzpicture}
-\tikzset{every node/.style={font=\fontsize{8}{9}\selectfont}}
-\draw[RoyalBlue,line width=0.8pt] (0,15.30)--(0.4,15.30);
-\node[anchor=west] at (0.48,15.30) {Fixed $b=3$};
-\draw[ForestGreen,dashed,line width=0.8pt] (3.35,15.30)--(3.75,15.30);
-\node[anchor=west] at (3.83,15.30) {Matching $b=|\delta(R)|$};
-\fill[black!70] (0.20,14.92) circle (1.5pt);
-\node[anchor=west] at (0.48,14.92) {Seed 0};
-\draw[black!70] (1.80,14.87) rectangle (1.90,14.97);
-\node[anchor=west] at (2.08,14.92) {Seed 1};
-\node[diamond,fill=black,inner sep=1.4pt] at (3.95,14.92) {};
-\node[anchor=west] at (4.20,14.92) {Measured baseline};
-\node[anchor=west,font=\fontsize{7}{8}\selectfont,text=black!70] at (0,14.55) {OPT: expected protected airports under a uniform source};
-\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0,14.15) {(a) R internal connectivity};
-\begin{axis}[
-at={(0.95cm,11.780000000000001cm)},
-anchor=south west,
-scale only axis,
-width=6.55cm,
-height=2.05cm,
-axis lines=left,
-axis line style={black!80,line width=0.5pt},
-tick style={black!70,line width=0.4pt},
-tick label style={font=\fontsize{8}{9}\selectfont},
-label style={font=\fontsize{8}{9}\selectfont},
-ymajorgrids=true,
-grid style={black!10,line width=0.3pt},
-xmin=8.55,
-xmax=36.45,
-ymin=0,
-ymax=27,
-ytick={0,10,20},
-xtick={9,15,21,27,30,33,36},
-ylabel={Exact OPT},
-clip=false,
-scaled ticks=false,
-/pgf/number format/fixed,
-/pgf/number format/precision=2,
-xticklabels={},
-xtick style={draw=none}
-]
-\draw[black!35,densely dotted,line width=0.5pt] (axis cs:30,0)--(axis cs:30,27);
-\node[anchor=west,font=\fontsize{7}{8}\selectfont,text=black!65] at (axis cs:10,5) {At 15 edges: seed gap $=16/443$};
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(9,17.634311512415) (15,17.634311512415) (21,17.634311512415) (27,17.634311512415) (30,17.634311512415) (33,17.634311512415) (36,17.634311512415)};
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(9,19.625282167043) (15,17.670428893905) (21,17.634311512415) (27,17.634311512415) (30,17.634311512415) (33,17.634311512415) (36,17.634311512415)};
-\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(30,17.634311512415)};
-\end{axis}
-\begin{axis}[
-at={(0.95cm,10.38cm)},
-anchor=south west,
-scale only axis,
-width=6.55cm,
-height=1.12cm,
-axis lines=left,
-axis line style={black!80,line width=0.5pt},
-tick style={black!70,line width=0.4pt},
-tick label style={font=\fontsize{8}{9}\selectfont},
-label style={font=\fontsize{8}{9}\selectfont},
-ymajorgrids=true,
-grid style={black!10,line width=0.3pt},
-xmin=8.55,
-xmax=36.45,
-ymin=-0.06,
-ymax=1.1,
-ytick={0,0.5,1},
-xtick={9,15,21,27,30,33,36},
-ylabel={BC/OPT},
-clip=false,
-scaled ticks=false,
-/pgf/number format/fixed,
-/pgf/number format/precision=2,
-xlabel={Internal edges in $R$},
-xlabel style={yshift=1pt}
-]
-\draw[black!35,densely dotted,line width=0.5pt] (axis cs:30,0)--(axis cs:30,1.1);
-\draw[black!25,line width=0.4pt] (axis cs:8.55,1)--(axis cs:36.45,1);
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(9,0) (15,0) (21,0) (27,0) (30,0) (33,0) (36,0)};
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(9,0.80055210489993) (15,0) (21,0) (27,0) (30,0) (33,0) (36,0)};
-\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(30,0)};
-\end{axis}
-\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0,9.25) {(b) R boundary width};
-\begin{axis}[
-at={(0.95cm,6.88cm)},
-anchor=south west,
-scale only axis,
-width=6.55cm,
-height=2.05cm,
-axis lines=left,
-axis line style={black!80,line width=0.5pt},
-tick style={black!70,line width=0.4pt},
-tick label style={font=\fontsize{8}{9}\selectfont},
-label style={font=\fontsize{8}{9}\selectfont},
-ymajorgrids=true,
-grid style={black!10,line width=0.3pt},
-xmin=0.87,
-xmax=6.13,
-ymin=0,
-ymax=27,
-ytick={0,10,20},
-xtick={1,2,3,4,5,6},
-ylabel={Exact OPT},
-clip=false,
-scaled ticks=false,
-/pgf/number format/fixed,
-/pgf/number format/precision=2,
-xticklabels={},
-xtick style={draw=none}
-]
-\draw[black!35,densely dotted,line width=0.5pt] (axis cs:3,0)--(axis cs:3,27);
-\fill[black,opacity=0.035] (axis cs:3.5,0) rectangle (axis cs:6.13,27);
-\node[anchor=north,font=\fontsize{7}{8}\selectfont,text=black!65] at (axis cs:4.8,26.7) {$R$ infeasible at $b=3$};
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(1,21.539503386005) (2,19.589164785553) (3,17.634311512415) (4,5.9729119638826) (5,5.9729119638826) (6,5.9729119638826)};
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(1,21.539503386005) (2,19.589164785553) (3,17.634311512415) (4,5.9729119638826) (5,5.9729119638826) (6,5.9729119638826)};
-\addplot[color=ForestGreen,dashed,line width=0.6pt,mark=square,mark size=1.7pt,mark options={solid}] coordinates {(1,17.634311512415) (2,17.634311512415) (3,17.634311512415) (4,17.634311512415) (5,17.634311512415) (6,25.237020316027)};
-\addplot[color=ForestGreen,dashed,line width=0.6pt,mark=*,mark size=0.7pt,mark options={solid}] coordinates {(1,17.634311512415) (2,17.634311512415) (3,17.634311512415) (4,17.634311512415) (5,17.634311512415) (6,25.237020316027)};
-\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(3,17.634311512415)};
-\end{axis}
-\begin{axis}[
-at={(0.95cm,5.48cm)},
-anchor=south west,
-scale only axis,
-width=6.55cm,
-height=1.12cm,
-axis lines=left,
-axis line style={black!80,line width=0.5pt},
-tick style={black!70,line width=0.4pt},
-tick label style={font=\fontsize{8}{9}\selectfont},
-label style={font=\fontsize{8}{9}\selectfont},
-ymajorgrids=true,
-grid style={black!10,line width=0.3pt},
-xmin=0.87,
-xmax=6.13,
-ymin=-0.06,
-ymax=1.1,
-ytick={0,0.5,1},
-xtick={1,2,3,4,5,6},
-ylabel={BC/OPT},
-clip=false,
-scaled ticks=false,
-/pgf/number format/fixed,
-/pgf/number format/precision=2,
-xlabel={$|\delta(R)|$},
-xlabel style={yshift=1pt}
-]
-\draw[black!35,densely dotted,line width=0.5pt] (axis cs:3,0)--(axis cs:3,1.1);
-\draw[black!25,line width=0.4pt] (axis cs:0.87,1)--(axis cs:6.13,1);
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(1,0.81869629008594) (2,0) (3,0) (4,0) (5,0) (6,0)};
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(1,0.81869629008594) (2,0) (3,0) (4,0) (5,0) (6,0)};
-\addplot[color=ForestGreen,dashed,line width=0.6pt,mark=square,mark size=1.7pt,mark options={solid}] coordinates {(1,1) (2,0) (3,0) (4,0) (5,0) (6,0)};
-\addplot[color=ForestGreen,dashed,line width=0.6pt,mark=*,mark size=0.7pt,mark options={solid}] coordinates {(1,0) (2,0) (3,0) (4,0) (5,0) (6,0)};
-\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(3,0)};
-\end{axis}
-\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0,4.35) {(c) U boundary width};
-\begin{axis}[
-at={(0.95cm,1.9799999999999995cm)},
-anchor=south west,
-scale only axis,
-width=6.55cm,
-height=2.05cm,
-axis lines=left,
-axis line style={black!80,line width=0.5pt},
-tick style={black!70,line width=0.4pt},
-tick label style={font=\fontsize{8}{9}\selectfont},
-label style={font=\fontsize{8}{9}\selectfont},
-ymajorgrids=true,
-grid style={black!10,line width=0.3pt},
-xmin=2.87,
-xmax=9.13,
-ymin=0,
-ymax=27,
-ytick={0,10,20},
-xtick={3,4,5,6,7,8,9},
-ylabel={Exact OPT},
-clip=false,
-scaled ticks=false,
-/pgf/number format/fixed,
-/pgf/number format/precision=2,
-xticklabels={},
-xtick style={draw=none}
-]
-\draw[black!35,densely dotted,line width=0.5pt] (axis cs:6,0)--(axis cs:6,27);
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(3,25.237020316027) (4,17.634311512415) (5,17.634311512415) (6,17.634311512415) (7,17.634311512415) (8,17.634311512415) (9,17.634311512415)};
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(3,25.237020316027) (4,17.634311512415) (5,17.634311512415) (6,17.634311512415) (7,17.634311512415) (8,17.634311512415) (9,17.634311512415)};
-\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(6,17.634311512415)};
-\end{axis}
-\begin{axis}[
-at={(0.95cm,0.5799999999999996cm)},
-anchor=south west,
-scale only axis,
-width=6.55cm,
-height=1.12cm,
-axis lines=left,
-axis line style={black!80,line width=0.5pt},
-tick style={black!70,line width=0.4pt},
-tick label style={font=\fontsize{8}{9}\selectfont},
-label style={font=\fontsize{8}{9}\selectfont},
-ymajorgrids=true,
-grid style={black!10,line width=0.3pt},
-xmin=2.87,
-xmax=9.13,
-ymin=-0.06,
-ymax=1.1,
-ytick={0,0.5,1},
-xtick={3,4,5,6,7,8,9},
-ylabel={BC/OPT},
-clip=false,
-scaled ticks=false,
-/pgf/number format/fixed,
-/pgf/number format/precision=2,
-xlabel={$|\delta(U)|$},
-xlabel style={yshift=1pt}
-]
-\draw[black!35,densely dotted,line width=0.5pt] (axis cs:6,0)--(axis cs:6,1.1);
-\draw[black!25,line width=0.4pt] (axis cs:2.87,1)--(axis cs:9.13,1);
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=square,mark size=2.4pt,mark options={solid}] coordinates {(3,0) (4,0) (5,0) (6,0) (7,0) (8,0) (9,0)};
-\addplot[color=RoyalBlue,solid,line width=0.8pt,mark=*,mark size=1.3pt,mark options={solid}] coordinates {(3,0) (4,0) (5,0) (6,0) (7,0) (8,0) (9,0)};
-\addplot[only marks,color=black,mark=diamond*,mark size=2.6pt] coordinates {(6,0)};
-\end{axis}
-\node[anchor=west,font=\fontsize{7}{8}\selectfont] at (0,-0.40) {BC is zero in 40 of 44 cases; all non-baseline graphs are synthetic.};
+\begin{tikzpicture}[x=1cm,y=1cm]
+\fill[RoyalBlue] (0.64,10.66) circle (1.7pt);
+\node[anchor=west,inner sep=0pt,font=\fontsize{8}{9}\selectfont] at (0.86,10.66) {Fixed Budget};
+\fill[ForestGreen] (3.04,10.66) circle (1.7pt);
+\node[anchor=west,inner sep=0pt,font=\fontsize{8}{9}\selectfont] at (3.26,10.66) {Matching Budget};
+\fill[black] (5.96,10.66)--(6.04,10.75)--(6.12,10.66)--(6.04,10.57)--cycle;
+\node[anchor=east,inner sep=0pt,font=\fontsize{8}{9}\selectfont] at (7.40,10.66) {Baseline};
+\node[anchor=center,rotate=90,font=\fontsize{8}{9}\selectfont] at (0.20,5.72) {Expected Protected Airports};
+\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0.48,9.770) {(a) R Internal Connectivity};
+\draw[black!75,line width=0.55pt] (1.360,9.370)--(1.360,8.050)--(7.400,8.050);
+\draw[black!65,line width=0.5pt] (1.320,8.050)--(1.360,8.050);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,8.050) {0};
+\draw[black!65,line width=0.5pt] (1.320,8.539)--(1.360,8.539);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,8.539) {10};
+\draw[black!65,line width=0.5pt] (1.320,9.028)--(1.360,9.028);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,9.028) {20};
+\draw[black!70,line width=0.5pt] (1.360,8.050)--(1.360,8.005);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (1.360,7.960) {9};
+\draw[black!70,line width=0.5pt] (2.702,8.050)--(2.702,8.005);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (2.702,7.960) {15};
+\draw[black!70,line width=0.5pt] (4.044,8.050)--(4.044,8.005);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (4.044,7.960) {21};
+\draw[black!70,line width=0.5pt] (5.387,8.050)--(5.387,8.005);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (5.387,7.960) {27};
+\draw[black!70,line width=0.5pt] (6.058,8.050)--(6.058,8.005);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (6.058,7.960) {30};
+\draw[black!70,line width=0.5pt] (6.729,8.050)--(6.729,8.005);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (6.729,7.960) {33};
+\draw[black!70,line width=0.5pt] (7.400,8.050)--(7.400,8.005);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (7.400,7.960) {36};
+\draw[RoyalBlue,line width=0.75pt] (1.3600,9.0095) -- (2.7022,8.9139) -- (4.0444,8.9121) -- (5.3867,8.9121) -- (6.0578,8.9121) -- (6.7289,8.9121) -- (7.4000,8.9121);
+\fill[RoyalBlue] (1.3600,9.0095) circle (1.25pt);
+\fill[RoyalBlue] (2.7022,8.9139) circle (1.25pt);
+\fill[RoyalBlue] (4.0444,8.9121) circle (1.25pt);
+\fill[RoyalBlue] (5.3867,8.9121) circle (1.25pt);
+\fill[RoyalBlue] (6.7289,8.9121) circle (1.25pt);
+\fill[RoyalBlue] (7.4000,8.9121) circle (1.25pt);
+\draw[RoyalBlue,line width=0.75pt] (1.3600,8.9121) -- (2.7022,8.9121) -- (4.0444,8.9121) -- (5.3867,8.9121) -- (6.0578,8.9121) -- (6.7289,8.9121) -- (7.4000,8.9121);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (1.3180,8.8701) rectangle (1.4020,8.9541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (2.6602,8.8701) rectangle (2.7442,8.9541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (4.0024,8.8701) rectangle (4.0864,8.9541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (5.3447,8.8701) rectangle (5.4287,8.9541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (6.6869,8.8701) rectangle (6.7709,8.9541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (7.3580,8.8701) rectangle (7.4420,8.9541);
+\fill[black] (5.9628,8.9121)--(6.0578,9.0071)--(6.1528,8.9121)--(6.0578,8.8171)--cycle;
+\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0.48,6.720) {(b) R Boundary Width};
+\draw[black!75,line width=0.55pt] (1.360,6.320)--(1.360,5.000)--(7.400,5.000);
+\draw[black!65,line width=0.5pt] (1.320,5.000)--(1.360,5.000);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,5.000) {0};
+\draw[black!65,line width=0.5pt] (1.320,5.489)--(1.360,5.489);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,5.489) {10};
+\draw[black!65,line width=0.5pt] (1.320,5.978)--(1.360,5.978);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,5.978) {20};
+\draw[black!70,line width=0.5pt] (1.360,5.000)--(1.360,4.955);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (1.360,4.910) {1};
+\draw[black!70,line width=0.5pt] (2.568,5.000)--(2.568,4.955);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (2.568,4.910) {2};
+\draw[black!70,line width=0.5pt] (3.776,5.000)--(3.776,4.955);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (3.776,4.910) {3};
+\draw[black!70,line width=0.5pt] (4.984,5.000)--(4.984,4.955);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (4.984,4.910) {4};
+\draw[black!70,line width=0.5pt] (6.192,5.000)--(6.192,4.955);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (6.192,4.910) {5};
+\draw[black!70,line width=0.5pt] (7.400,5.000)--(7.400,4.955);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (7.400,4.910) {6};
+\draw[RoyalBlue,line width=0.75pt] (1.3600,6.0530) -- (2.5680,5.9577) -- (3.7760,5.8621) -- (4.9840,5.2920) -- (6.1920,5.2920) -- (7.4000,5.2920);
+\fill[RoyalBlue] (1.3600,6.0530) circle (1.25pt);
+\fill[RoyalBlue] (2.5680,5.9577) circle (1.25pt);
+\fill[RoyalBlue] (4.9840,5.2920) circle (1.25pt);
+\fill[RoyalBlue] (6.1920,5.2920) circle (1.25pt);
+\fill[RoyalBlue] (7.4000,5.2920) circle (1.25pt);
+\draw[RoyalBlue,line width=0.75pt] (1.3600,6.0530) -- (2.5680,5.9577) -- (3.7760,5.8621) -- (4.9840,5.2920) -- (6.1920,5.2920) -- (7.4000,5.2920);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (1.3180,6.0110) rectangle (1.4020,6.0950);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (2.5260,5.9157) rectangle (2.6100,5.9997);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (4.9420,5.2500) rectangle (5.0260,5.3340);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (6.1500,5.2500) rectangle (6.2340,5.3340);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (7.3580,5.2500) rectangle (7.4420,5.3340);
+\draw[ForestGreen,line width=0.75pt] (1.3600,5.8621) -- (2.5680,5.8621) -- (3.7760,5.8621) -- (4.9840,5.8621) -- (6.1920,5.8621) -- (7.4000,6.2338);
+\fill[ForestGreen] (1.3600,5.8621) circle (1.25pt);
+\fill[ForestGreen] (2.5680,5.8621) circle (1.25pt);
+\fill[ForestGreen] (4.9840,5.8621) circle (1.25pt);
+\fill[ForestGreen] (6.1920,5.8621) circle (1.25pt);
+\fill[ForestGreen] (7.4000,6.2338) circle (1.25pt);
+\draw[ForestGreen,line width=0.75pt] (1.3600,5.8621) -- (2.5680,5.8621) -- (3.7760,5.8621) -- (4.9840,5.8621) -- (6.1920,5.8621) -- (7.4000,6.2338);
+\draw[ForestGreen,fill=white,line width=0.75pt] (1.3180,5.8201) rectangle (1.4020,5.9041);
+\draw[ForestGreen,fill=white,line width=0.75pt] (2.5260,5.8201) rectangle (2.6100,5.9041);
+\draw[ForestGreen,fill=white,line width=0.75pt] (4.9420,5.8201) rectangle (5.0260,5.9041);
+\draw[ForestGreen,fill=white,line width=0.75pt] (6.1500,5.8201) rectangle (6.2340,5.9041);
+\draw[ForestGreen,fill=white,line width=0.75pt] (7.3580,6.1918) rectangle (7.4420,6.2758);
+\fill[black] (3.6810,5.8621)--(3.7760,5.9571)--(3.8710,5.8621)--(3.7760,5.7671)--cycle;
+\node[anchor=west,font=\fontsize{9}{10}\selectfont\bfseries] at (0.48,3.670) {(c) U Boundary Width};
+\draw[black!75,line width=0.55pt] (1.360,3.270)--(1.360,1.950)--(7.400,1.950);
+\draw[black!65,line width=0.5pt] (1.320,1.950)--(1.360,1.950);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,1.950) {0};
+\draw[black!65,line width=0.5pt] (1.320,2.439)--(1.360,2.439);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,2.439) {10};
+\draw[black!65,line width=0.5pt] (1.320,2.928)--(1.360,2.928);
+\node[anchor=east,font=\fontsize{7.5}{8.5}\selectfont,text=black!75] at (1.240,2.928) {20};
+\draw[black!70,line width=0.5pt] (1.360,1.950)--(1.360,1.905);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (1.360,1.860) {3};
+\draw[black!70,line width=0.5pt] (2.367,1.950)--(2.367,1.905);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (2.367,1.860) {4};
+\draw[black!70,line width=0.5pt] (3.373,1.950)--(3.373,1.905);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (3.373,1.860) {5};
+\draw[black!70,line width=0.5pt] (4.380,1.950)--(4.380,1.905);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (4.380,1.860) {6};
+\draw[black!70,line width=0.5pt] (5.387,1.950)--(5.387,1.905);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (5.387,1.860) {7};
+\draw[black!70,line width=0.5pt] (6.393,1.950)--(6.393,1.905);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (6.393,1.860) {8};
+\draw[black!70,line width=0.5pt] (7.400,1.950)--(7.400,1.905);
+\node[anchor=north,font=\fontsize{7.5}{8.5}\selectfont,text=black!80] at (7.400,1.860) {9};
+\draw[RoyalBlue,line width=0.75pt] (1.3600,3.1838) -- (2.3667,2.8121) -- (3.3733,2.8121) -- (4.3800,2.8121) -- (5.3867,2.8121) -- (6.3933,2.8121) -- (7.4000,2.8121);
+\fill[RoyalBlue] (1.3600,3.1838) circle (1.25pt);
+\fill[RoyalBlue] (2.3667,2.8121) circle (1.25pt);
+\fill[RoyalBlue] (3.3733,2.8121) circle (1.25pt);
+\fill[RoyalBlue] (5.3867,2.8121) circle (1.25pt);
+\fill[RoyalBlue] (6.3933,2.8121) circle (1.25pt);
+\fill[RoyalBlue] (7.4000,2.8121) circle (1.25pt);
+\draw[RoyalBlue,line width=0.75pt] (1.3600,3.1838) -- (2.3667,2.8121) -- (3.3733,2.8121) -- (4.3800,2.8121) -- (5.3867,2.8121) -- (6.3933,2.8121) -- (7.4000,2.8121);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (1.3180,3.1418) rectangle (1.4020,3.2258);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (2.3247,2.7701) rectangle (2.4087,2.8541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (3.3313,2.7701) rectangle (3.4153,2.8541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (5.3447,2.7701) rectangle (5.4287,2.8541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (6.3513,2.7701) rectangle (6.4353,2.8541);
+\draw[RoyalBlue,fill=white,line width=0.75pt] (7.3580,2.7701) rectangle (7.4420,2.8541);
+\fill[black] (4.2850,2.8121)--(4.3800,2.9071)--(4.4750,2.8121)--(4.3800,2.7171)--cycle;
 \end{tikzpicture}
-}

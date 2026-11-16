@@ -1435,28 +1435,112 @@ def testcompetitiontheory():
     main()
 
 def testfigures():
-    from pathlib import Path
-
-    import runpy
-
-    from unittest.mock import patch
-
+    import csv,hashlib,json,re,sys,tempfile
+    sys.path.insert(0,str(Path(__file__).resolve().parent.parent/'figures'))
+    import fig7,fig8
     root = Path(__file__).resolve().parent.parent
+    protected = [p for p in (root/'data').rglob('*') if p.is_file()]
+    before = {p:hashlib.sha256(p.read_bytes()).hexdigest() for p in protected}
+    hashes = {7:'8dd1003df65a4e109b80150884958710bd2593535f78cb69e6274cf1c47e5638',
+              8:'52af0a9fc1629e785b4688693e297ae22e50b4e53fdcf8ac4e747a69b02a018d'}
+    for number,module in ((7,fig7),(8,fig8)):
+        tex = module.figure()
+        assert tex.encode()==module.output.read_bytes()
+        assert hashlib.sha256(tex.encode()).hexdigest()==hashes[number]
+        with patch.object(sys,'argv',[f'fig{number}.py','--check']), \
+             patch.object(Path,'write_bytes',side_effect=AssertionError('Verification wrote a file')), \
+             patch.object(Path,'write_text',side_effect=AssertionError('Verification wrote a file')):
+            module.main()
+        with tempfile.TemporaryDirectory() as directory:
+            invalid = Path(directory)/'invalid.tex'
+            invalid.write_text(tex+'changed')
+            with patch.object(module,'output',invalid),patch.object(sys,'argv',[f'fig{number}.py','--check']), \
+                 patch.object(Path,'write_bytes',side_effect=AssertionError('Verification overwrote a mismatch')):
+                try: module.main()
+                except SystemExit as error: assert str(error).startswith('FAIL Figure')
+                else: raise AssertionError('Mismatching saved figure was accepted')
+            assert invalid.read_text()==tex+'changed'
+    plots = re.findall(r'coordinates \{\n(.*?)\n\};',fig7.figure(),re.S)
+    assert len(plots)==6
+    total = 0
+    for panel,(path,target,count) in enumerate(((fig7.commuting,'counties',37),(fig7.air,'airports',60))):
+        with path.open(newline='') as stream:
+            records = [r for r in csv.DictReader(stream) if r['prior']=='uniform' and r['target']==target and int(r['budget'])<=3]
+        loaded = fig7.load(path,'uniform',target)
+        for b in (1,2,3):
+            rows = sorted((r for r in records if int(r['budget'])==b),key=lambda r:Fraction(r['threshold']))
+            points = [(Fraction(r['threshold']),Fraction(r['exact'])) for r in rows]
+            assert loaded[b]==points and len(points)==count
+            assert all(a[0]<b[0] for a,b in zip(points,points[1:]))
+            plotted = re.findall(r'\(([^,]+),([^\)]+)\)',plots[3*panel+b-1])
+            assert len(plotted)==count
+            for (x,y),(px,py),row in zip(points,plotted,rows):
+                assert py==f'{float(y):.8g}'
+                assert abs(float(px)-float(x))<5e-8
+                n = int(row['n'])
+                sizes = json.loads(row['componentsizes'])
+                assert sum(sizes)==n and y==Fraction(n*n-sum(c*c for c in sizes),n)
+                if x==Fraction(46,35):
+                    assert px=='1.3142857142857143'
+                    assert float(px)==float(Fraction(46,35))
+            if panel==0:
+                index = [x for x,y in points].index(Fraction(46,35))
+                assert points[index-1][0]==Fraction(21,16) and points[index+1][0]==Fraction(263,200)
+                assert int(rows[index-1]['n'])==3084 and int(rows[index]['n'])==3083
+            total += count
+    assert total==291
+    print('PASS Figure 7: all 291 CSV values and component scores; rational ordering and full 46/35 breakpoint precision')
+    text = fig8.figure()
+    scopes = re.findall(r'\\begin\{scope\}\[shift=\{\(0,([^)]*)\)\}\](.*?)\\end\{scope\}',text,re.S)
+    classified = {}
+    with (root/'data/results/competition.csv').open(newline='') as stream:
+        expected = {(r['family'],int(r['b_size']),int(r['gateway_width'])):int(Fraction(r['bc_ratio_fraction'])) for r in csv.DictReader(stream)}
+    for name,(r,k,widths) in fig8.families.items():
+        body = next(body for offset,body in scopes if '{Family '+name+'}' in body)
+        cells = {}
+        for line in body.splitlines():
+            one = re.fullmatch(r'\\tile\{(fail|succ)\}\{(\d+)\}\{(\d+)\}',line)
+            many = re.fullmatch(r'\\foreach \\r in \{([^}]+)\} \{\\tile\{(fail|succ)\}\{(\d+)\}\{\\r\}\}',line)
+            if one:
+                color,column,row = one.groups()
+                indices = [int(row)]
+            elif many:
+                labels,color,column = many.groups()
+                numbers = labels.split(',')
+                indices = list(range(int(numbers[0]),int(numbers[-1])+1)) if '...' in numbers else list(map(int,numbers))
+            else: continue
+            for row in indices:
+                key = int(column),row
+                assert key not in cells
+                cells[key] = int(color=='succ')
+        assert set(cells)=={(x,y) for x in range(1,6) for y in range(1,8)}
+        curve = re.search(r'\\draw\[black,line width=0.8pt\]\n(.*?);',body,re.S).group(1)
+        points = [tuple(map(int,p)) for p in re.findall(r'\((\d+),(\d+)\)',curve)]
+        assert points[0][0]==0 and points[-1][0]==5
+        for i,m in enumerate(fig8.sizes,1):
+            height = sum(2*k*(60-m)*m-r*h*(2*(60-m)+h-k)>0 for h in widths)
+            horizontal = [(x,y,u,v) for (x,y),(u,v) in zip(points,points[1:]) if y==v and x<i-0.5<u]
+            assert len(horizontal)==1 and horizontal[0][1]==height
+            for j,h in enumerate(widths,1):
+                key = name,m,h
+                classified[key] = cells[i,j]
+                assert classified[key]==expected[key]==int(j>height)
+    assert len(classified)==70 and classified==expected
+    assert '\\begin{axis}' not in text
+    print('PASS Figure 8: 70 distinct saved classifications; both discrete theoretical boundaries and exact reference styling')
+    changed = fig7.load(fig7.commuting,'uniform','counties')
+    changed[1][0] = (changed[1][0][0],changed[1][0][1]+1)
+    original = fig7.load
+    with patch.object(fig7,'load',side_effect=lambda path,prior,target:changed if target=='counties' else original(path,prior,target)):
+        assert fig7.figure()!=fig7.output.read_text()
+    changed = fig8.load()
+    first = next(iter(changed))
+    changed[first] = 1-changed[first]
+    with patch.object(fig8,'load',return_value=changed):
+        assert fig8.figure()!=fig8.output.read_text()
+    assert all(hashlib.sha256(p.read_bytes()).hexdigest()==digest for p,digest in before.items())
+    print('PASS data-driven generation, non-writing checks, mismatch rejection, and unchanged raw/results/provenance bytes')
 
-    written = []
-
-    def capture(path,text,*args,**kwargs):
-        assert path.read_text()==text,path
-        written.append(path.relative_to(root))
-        return len(text)
-
-    with patch.object(Path,'write_text',capture):
-        for name in ('fig7','fig8'):
-            runpy.run_path(str(root/'figures'/(name+'.py')),run_name='__main__')
-
-    assert written==[Path('figures/fig7.tex'),Path('figures/fig8.tex')]
-
-    print('PASS both figure generators exactly reproduce the preserved TeX without writing it')
 
 def testhighschool():
     from fractions import Fraction
@@ -2062,39 +2146,73 @@ def testfigure9():
         assert row['anotheroptimalcut']==('yes: saved representative' if row['representative']=='other' else 'unverified: no co-optimal enumeration')
 
     tex = (folder/'fig9.tex').read_text()
+    assert figure9.figure(regenerated)==tex
+    assert hashlib.sha256(tex.encode()).hexdigest()=='a7e44dd5d4fb800c37e7583b202b7290fd1a0603165dcb2ff6a91961095e625d'
+    assert '%' not in tex and '\\begin{axis}' not in tex
+    assert 'dashed' not in tex and '40 of 44' not in tex and 'BC/OPT' not in tex
+    for label in ('Fixed Budget','Matching Budget','Baseline','Expected Protected Airports'):
+        assert '{'+label+'}' in tex
+    blocks = re.split(r'(?=\\node\[anchor=west,font=\\fontsize\{9\}\{10\}\\selectfont\\bfseries\])',tex)[1:]
+    assert len(blocks)==3
+    represented = set()
+    for panel,(feature,anchor,low,high,bottom) in enumerate((('internal',30,9,36,8.05),('boundary',3,1,6,5),('competing',6,3,9,1.95))):
+        body = blocks[panel]
+        assert body.count('\\draw[black!75,line width=0.55pt]')==1
+        curves = re.findall(r'\\draw\[(RoyalBlue|ForestGreen),line width=0.75pt\] (.*?);',body)
+        assert len(curves)==(4 if panel==1 else 2)
+        for index,(color,curve) in enumerate(curves):
+            seed = index%2
+            matching = color=='ForestGreen'
+            plotted = re.findall(r'\(([^,]+),([^\)]+)\)',curve)
+            subset = [r for r in rows if r['family']==feature and seed in json.loads(r['seeds'])
+                      and int(r['budget'])==(int(r['rboundarysize']) if matching else 3)]
+            subset += [next(r for r in rows if r['family']=='original')]
+            subset.sort(key=lambda r:anchor if r['family']=='original' else int(r['level']))
+            assert len(plotted)==len(subset)
+            for (px,py),row in zip(plotted,subset):
+                level = anchor if row['family']=='original' else int(row['level'])
+                x = 1.36+6.04*(level-low)/(high-low)
+                y = bottom+1.32*float(Fraction(row['exact']))/27
+                assert px==f'{x:.4f}' and py==f'{y:.4f}',(row['variant'],row['budget'],seed)
+                represented.add((row['variant'],row['budget']))
+                if row['family']=='original': continue
+                if seed==0:
+                    mark = f'\\fill[{color}] ({x:.4f},{y:.4f}) circle (1.25pt);'
+                else:
+                    mark = f'\\draw[{color},fill=white,line width=0.75pt] ({x-0.042:.4f},{y-0.042:.4f}) rectangle ({x+0.042:.4f},{y+0.042:.4f});'
+                assert mark in body,(row['variant'],row['budget'],seed)
+        baseline = next(r for r in rows if r['family']=='original')
+        x = 1.36+6.04*(anchor-low)/(high-low)
+        y = bottom+1.32*float(Fraction(baseline['exact']))/27
+        mark = f'\\fill[black] ({x-0.095:.4f},{y:.4f})--({x:.4f},{y+0.095:.4f})--({x+0.095:.4f},{y:.4f})--({x:.4f},{y-0.095:.4f})--cycle;'
+        assert body.count('\\fill[black]')==1 and mark in body
+    assert represented=={(r['variant'],r['budget']) for r in rows}
+    assert len(represented)==44
+    print('PASS all 44 cases in three exact-protection plots, two seeds, fixed/matching budgets and three measured markers')
+    print('PASS exact fractions, BC scores, feasible-only candidates, optimality classifications and co-optimality caveat')
+    print('PASS final reference bytes, solid lines, Title Case legend and no obsolete BC annotation')
+    import copy,tempfile
+    changed = copy.deepcopy(regenerated)
+    changed[1]['exact'] = str(Fraction(changed[1]['exact'])+1)
+    assert figure9.figure(changed)!=tex
+    before = {p:hashlib.sha256(p.read_bytes()).hexdigest() for p in (folder.parent/'data').rglob('*') if p.is_file()}
+    with patch.object(figure9,'extract',return_value=regenerated),patch.object(sys,'argv',['fig9.py','--check']), \
+         patch.object(Path,'write_bytes',side_effect=AssertionError('Verification wrote a file')), \
+         patch.object(Path,'write_text',side_effect=AssertionError('Verification wrote a file')), \
+         patch.object(savedreports,'save',side_effect=AssertionError('Verification changed provenance')):
+        figure9.main()
+    with tempfile.TemporaryDirectory() as directory:
+        invalid = Path(directory)/'fig9.tex'
+        invalid.write_text(tex+'changed')
+        with patch.object(figure9,'folder',Path(directory)),patch.object(figure9,'extract',return_value=regenerated), \
+             patch.object(sys,'argv',['fig9.py','--check']),patch.object(Path,'write_bytes',side_effect=AssertionError('Verification overwrote a mismatch')):
+            try: figure9.main()
+            except SystemExit as error: assert str(error).startswith('FAIL Figure 9')
+            else: raise AssertionError('Mismatching Figure 9 was accepted')
+        assert invalid.read_text()==tex+'changed'
+    assert all(hashlib.sha256(p.read_bytes()).hexdigest()==digest for p,digest in before.items())
+    print('PASS data-driven figure, non-writing verification, mismatch rejection, and immutable saved results/provenance')
 
-    assert '%' not in tex
-
-    axes = re.findall(r'\\begin\{axis\}(.*?)\\end\{axis\}',tex,re.S)
-
-    assert len(axes)==6
-
-    for row in rows:
-        panels = range(3) if row['family']=='original' else [('internal','boundary','competing').index(row['family'])]
-        for panel in panels:
-            x = (30,3,6)[panel] if row['family']=='original' else int(row['level'])
-            color = 'RoyalBlue' if row['budget']=='3' else 'ForestGreen'
-            for offset,outcome in enumerate(('exactdecimal','ratiodecimal')):
-                plots = re.findall(r'\\addplot\[(.*?)\] coordinates \{(.*?)\};',axes[2*panel+offset])
-                for seed in json.loads(row['seeds']):
-                    marker = 'mark=square' if seed else 'mark=*'
-                    points = [point for options,coords in plots if 'color='+color in options and marker in options for point in re.findall(r'\(([^,]+),([^\)]+)\)',coords)]
-                    assert any(float(px)==x and abs(float(py)-float(row[outcome]))<1e-12 for px,py in points),(row['variant'],row['budget'],panel,outcome,seed)
-
-    assert len(re.findall('color=black,mark=diamond',tex))==6
-
-    assert '40 of 44' in tex
-
-    print('PASS: all 44 saved cases represented in exact and BC/OPT axes; six measured reference markers')
-
-    print('PASS: exact fractions, feasible-only candidate scores, optimality classifications and co-optimality caveat')
-
-    print('PASS: three paired panels, fixed/matching budget styles, seed traces and no percent characters in TeX')
-
-    def capture(path,value):
-        assert path==folder/'fig9.tex' and value==tex
-
-    with patch.object(Path,'write_text',capture): figure9.figure(regenerated)
 
 def testvalley():
     import csv
@@ -2265,6 +2383,39 @@ def testrecords():
             assert savedreports.exists('new') and savedreports.text('new')=='New report'
             assert savedreports.text('fixture')==content
     print('PASS consolidated report text, hashes, historical paths and overwrite protection')
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        path = root/'records.json'
+        content = json.dumps(dict(reports={},reporthashes={},artifacts={'figures/fig7.tex':'old'},
+                                  sources=[dict(current='figures/fig7.py',currentsha256='old')]))
+        path.write_text(content)
+        names = {'code/records.py','code/tests.py'}|{f'figures/fig{n}.{suffix}' for n in (7,8,9) for suffix in ('py','tex')}
+        hashes = {}
+        for name in names:
+            item = root/name
+            item.parent.mkdir(parents=True,exist_ok=True)
+            item.write_text('current '+name)
+            hashes[name] = hashlib.sha256(item.read_bytes()).hexdigest()
+        manifest = dict(records=hashlib.sha256(path.read_bytes()).hexdigest(),files=hashes,
+                        reference={name:digest for name,digest in hashes.items() if name.endswith('.tex')})
+        revisions = root/'figures/checks.json'
+        revisions.write_text(json.dumps(manifest))
+        with patch.object(savedreports,'root',root),patch.object(savedreports,'path',path):
+            assert savedreports.check()==1
+            for name in ('figures/fig7.tex','figures/fig7.py','code/tests.py','records.json'):
+                item = root/name
+                old = item.read_bytes()
+                item.write_bytes(old+b'\n')
+                try: savedreports.check()
+                except AssertionError: pass
+                else: raise AssertionError('Modified figure/source/provenance was accepted: '+name)
+                item.write_bytes(old)
+            manifest['files']['data/raw/extra.csv'] = 'not authorized'
+            revisions.write_text(json.dumps(manifest))
+            try: savedreports.check()
+            except AssertionError: pass
+            else: raise AssertionError('Figure revision tried to override an experimental input')
+    print('PASS separate figure revision checks reject changed figures, generators, tests, historical records and input overrides')
     for name,entry in [('baselines','main'),('randomgraphs','main'),('transmission','main'),('population','main'),('livestock','main'),('washington','main'),('valley','main'),('livestock','directed')]:
         module = importlib.import_module(name)
         with patch.object(sys,'argv',[name+'.py']):
@@ -2303,7 +2454,7 @@ def suite():
     import records as savedreports
     root = Path(__file__).resolve().parent.parent
     start = perf_counter()
-    print(f'PASS {savedreports.check()} preserved artifacts and reports',flush=True)
+    print(f'PASS {savedreports.check()} current artifacts and preserved reports',flush=True)
     commands = [('code/tests.py',name) for name in CASES]
     commands += [(f'code/{name}.py','--check') for name in ('baselines','randomgraphs','population','transmission','livestock')]
     commands += [('code/livestock.py','--directed','--check')]

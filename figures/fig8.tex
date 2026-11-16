@@ -1,112 +1,151 @@
 \resizebox{0.98\columnwidth}{!}{
-\begin{tikzpicture}
-\begin{axis}[
-width=8.55cm,height=4.45cm,
-at={(0,4.95cm)},anchor=south west,
-axis lines=left,axis on top,
-axis line style={black,line width=0.5pt},
-tick style={black,line width=0.45pt},
-tick label style={font=\scriptsize},label style={font=\small},
-xmin=10,xmax=33,ymin=2.5,ymax=13,
-xtick={12,16,20,24,30},
-ytick={3,4,5,6,8,10,12},
-xlabel={Competing Block Size},ylabel={Gateway Width},
-legend style={draw=none,fill=none,font=\scriptsize,legend columns=2,at={(0.5,1.05)},anchor=south,column sep=8pt},
-clip=true
-]
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:10,2.5) rectangle (axis cs:14,3.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,3.5) rectangle (axis cs:14,4.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,4.5) rectangle (axis cs:14,5.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,5.5) rectangle (axis cs:14,7);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,7) rectangle (axis cs:14,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,9) rectangle (axis cs:14,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,11) rectangle (axis cs:14,13);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:14,2.5) rectangle (axis cs:18,3.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:14,3.5) rectangle (axis cs:18,4.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:14,4.5) rectangle (axis cs:18,5.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,5.5) rectangle (axis cs:18,7);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,7) rectangle (axis cs:18,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,9) rectangle (axis cs:18,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,11) rectangle (axis cs:18,13);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:18,2.5) rectangle (axis cs:22,3.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:18,3.5) rectangle (axis cs:22,4.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:18,4.5) rectangle (axis cs:22,5.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:18,5.5) rectangle (axis cs:22,7);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:18,7) rectangle (axis cs:22,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:18,9) rectangle (axis cs:22,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:18,11) rectangle (axis cs:22,13);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:22,2.5) rectangle (axis cs:27,3.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:22,3.5) rectangle (axis cs:27,4.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:22,4.5) rectangle (axis cs:27,5.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:22,5.5) rectangle (axis cs:27,7);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:22,7) rectangle (axis cs:27,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:22,9) rectangle (axis cs:27,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:22,11) rectangle (axis cs:27,13);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,2.5) rectangle (axis cs:33,3.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,3.5) rectangle (axis cs:33,4.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,4.5) rectangle (axis cs:33,5.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,5.5) rectangle (axis cs:33,7);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,7) rectangle (axis cs:33,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:27,9) rectangle (axis cs:33,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:27,11) rectangle (axis cs:33,13);
-\addplot[black,line width=0.55pt,mark=none,domain=10:33,samples=201,forget plot] {(-(2*(60-x)-2)+sqrt((2*(60-x)-2)^2+8*2*(60-x)*x/6))/2};
-\addlegendimage{area legend,draw=none,fill=black!10}
-\addlegendentry{$\mathrm{BC}/\mathrm{OPT}=0$}
-\addlegendimage{area legend,draw=none,fill=black!40}
-\addlegendentry{$\mathrm{BC}/\mathrm{OPT}=1$}
-\node[anchor=north west,font=\small,inner sep=2pt] at (rel axis cs:0.01,0.99) {(a)};
-\end{axis}
-\begin{axis}[
-width=8.55cm,height=4.45cm,
-at={(0,0)},anchor=south west,
-axis lines=left,axis on top,
-axis line style={black,line width=0.5pt},
-tick style={black,line width=0.45pt},
-tick label style={font=\scriptsize},label style={font=\small},
-xmin=10,xmax=33,ymin=2.5,ymax=13,
-xtick={12,16,20,24,30},
-ytick={4,5,6,7,8,10,12},
-xlabel={Competing Block Size},ylabel={Gateway Width},
-legend style={draw=none,fill=none,font=\scriptsize,legend columns=2,at={(0.5,1.05)},anchor=south,column sep=8pt},
-clip=true
-]
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,3.5) rectangle (axis cs:14,4.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,4.5) rectangle (axis cs:14,5.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,5.5) rectangle (axis cs:14,6.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,6.5) rectangle (axis cs:14,7.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,7.5) rectangle (axis cs:14,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,9) rectangle (axis cs:14,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:10,11) rectangle (axis cs:14,13);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:14,3.5) rectangle (axis cs:18,4.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:14,4.5) rectangle (axis cs:18,5.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,5.5) rectangle (axis cs:18,6.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,6.5) rectangle (axis cs:18,7.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,7.5) rectangle (axis cs:18,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,9) rectangle (axis cs:18,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:14,11) rectangle (axis cs:18,13);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:18,3.5) rectangle (axis cs:22,4.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:18,4.5) rectangle (axis cs:22,5.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:18,5.5) rectangle (axis cs:22,6.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:18,6.5) rectangle (axis cs:22,7.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:18,7.5) rectangle (axis cs:22,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:18,9) rectangle (axis cs:22,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:18,11) rectangle (axis cs:22,13);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:22,3.5) rectangle (axis cs:27,4.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:22,4.5) rectangle (axis cs:27,5.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:22,5.5) rectangle (axis cs:27,6.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:22,6.5) rectangle (axis cs:27,7.5);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:22,7.5) rectangle (axis cs:27,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:22,9) rectangle (axis cs:27,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:22,11) rectangle (axis cs:27,13);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,3.5) rectangle (axis cs:33,4.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,4.5) rectangle (axis cs:33,5.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,5.5) rectangle (axis cs:33,6.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,6.5) rectangle (axis cs:33,7.5);
-\path[fill=black!10,draw=white,line width=0.25pt] (axis cs:27,7.5) rectangle (axis cs:33,9);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:27,9) rectangle (axis cs:33,11);
-\path[fill=black!40,draw=white,line width=0.25pt] (axis cs:27,11) rectangle (axis cs:33,13);
-\addplot[black,line width=0.55pt,mark=none,domain=10:33,samples=201,forget plot] {(-(2*(60-x)-3)+sqrt((2*(60-x)-3)^2+8*3*(60-x)*x/9))/2};
-\node[anchor=north west,font=\small,inner sep=2pt] at (rel axis cs:0.01,0.99) {(b)};
-\end{axis}
+\begin{tikzpicture}[x=1.25cm,y=0.62cm,font=\small]
+
+\definecolor{fail}{RGB}{225,194,177}
+\definecolor{succ}{RGB}{188,204,224}
+
+\newcommand{\tile}[3]{
+\path[fill=#1,draw=white,line width=0.4pt]
+(#2-1,#3-1) rectangle (#2,#3);
+}
+
+\begin{scope}[shift={(0,19.15)}]
+\def\legy{0.32}
+
+\def\cA{0.95}
+\def\cB{2.50}
+\def\cC{4.05}
+
+\draw[fill=fail,draw=black!60,line width=0.35pt]
+(\cA-0.42,\legy-0.12) rectangle (\cA-0.10,\legy+0.12);
+\node[anchor=west,font=\scriptsize] at (\cA,\legy) {Fail};
+
+\draw[fill=succ,draw=black!60,line width=0.35pt]
+(\cB-0.52,\legy-0.12) rectangle (\cB-0.20,\legy+0.12);
+\node[anchor=west,font=\scriptsize] at (\cB-0.10,\legy) {Succeed};
+
+\draw[black,line width=0.8pt] (\cC-0.45,\legy) -- (\cC-0.05,\legy);
+\node[anchor=west,font=\scriptsize] at (\cC+0.05,\legy) {Theory};
+\end{scope}
+
+\begin{scope}[shift={(0,10.55)}]
+
+\node[anchor=center,font=\small] at (-1.05,7.55) {(a)};
+\node[anchor=center,font=\small] at (2.5,7.55) {Family A};
+
+\tile{fail}{1}{1}
+\foreach \r in {2,...,7} {\tile{succ}{1}{\r}}
+
+\foreach \r in {1,2,3} {\tile{fail}{2}{\r}}
+\foreach \r in {4,...,7} {\tile{succ}{2}{\r}}
+
+\foreach \r in {1,2,3,4} {\tile{fail}{3}{\r}}
+\foreach \r in {5,6,7} {\tile{succ}{3}{\r}}
+
+\foreach \r in {1,2,3,4} {\tile{fail}{4}{\r}}
+\foreach \r in {5,6,7} {\tile{succ}{4}{\r}}
+
+\foreach \r in {1,2,3,4,5} {\tile{fail}{5}{\r}}
+\foreach \r in {6,7} {\tile{succ}{5}{\r}}
+
+\draw[black!70,line width=0.5pt] (0,0) rectangle (5,7);
+
+\foreach \x/\lab in {
+0.5/12,
+1.5/16,
+2.5/20,
+3.5/24,
+4.5/30
+}{
+\node[anchor=north,font=\scriptsize] at (\x,-0.22) {\lab};
+}
+
+\foreach \y/\lab in {
+0.5/3,
+1.5/4,
+2.5/5,
+3.5/6,
+4.5/8,
+5.5/10,
+6.5/12
+}{
+\node[anchor=east,font=\scriptsize] at (-0.18,\y) {\lab};
+}
+
+\node[anchor=north,font=\small] at (2.5,-0.78) {Block Size $m$};
+\node[rotate=90,anchor=south,font=\small] at (-0.72,3.5) {Gateway $h$};
+
+\draw[black,line width=0.8pt]
+(0,1) --
+(1,1) --
+(1,3) --
+(2,3) --
+(2,4) --
+(4,4) --
+(4,5) --
+(5,5);
+
+\end{scope}
+
+\begin{scope}[shift={(0,0)}]
+
+\node[anchor=center,font=\small] at (-1.05,7.55) {(b)};
+\node[anchor=center,font=\small] at (2.5,7.55) {Family B};
+
+\foreach \r in {1,...,7} {\tile{succ}{1}{\r}}
+
+\foreach \r in {1,2} {\tile{fail}{2}{\r}}
+\foreach \r in {3,...,7} {\tile{succ}{2}{\r}}
+
+\foreach \r in {1,2,3} {\tile{fail}{3}{\r}}
+\foreach \r in {4,...,7} {\tile{succ}{3}{\r}}
+
+\foreach \r in {1,2,3,4} {\tile{fail}{4}{\r}}
+\foreach \r in {5,6,7} {\tile{succ}{4}{\r}}
+
+\foreach \r in {1,2,3,4,5} {\tile{fail}{5}{\r}}
+\foreach \r in {6,7} {\tile{succ}{5}{\r}}
+
+\draw[black!70,line width=0.5pt] (0,0) rectangle (5,7);
+
+\foreach \x/\lab in {
+0.5/12,
+1.5/16,
+2.5/20,
+3.5/24,
+4.5/30
+}{
+\node[anchor=north,font=\scriptsize] at (\x,-0.22) {\lab};
+}
+
+\foreach \y/\lab in {
+0.5/4,
+1.5/5,
+2.5/6,
+3.5/7,
+4.5/8,
+5.5/10,
+6.5/12
+}{
+\node[anchor=east,font=\scriptsize] at (-0.18,\y) {\lab};
+}
+
+\node[anchor=north,font=\small] at (2.5,-0.78) {Block Size $m$};
+\node[rotate=90,anchor=south,font=\small] at (-0.72,3.5) {Gateway $h$};
+
+\draw[black,line width=0.8pt]
+(0,0) --
+(1,0) --
+(1,2) --
+(2,2) --
+(2,3) --
+(3,3) --
+(3,4) --
+(4,4) --
+(4,5) --
+(5,5);
+
+\end{scope}
+
 \end{tikzpicture}
 }
