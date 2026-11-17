@@ -319,7 +319,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input',type=Path,default=root/'data/raw/table1.xlsx')
     parser.add_argument('--adjacency',type=Path)
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
     args = parser.parse_args()
+    destination = savedreports.prepare(args.output,('commutingresults.csv',),('commuting',))
     start = perf_counter()
     if hashlib.sha256(args.input.read_bytes()).hexdigest()!=sourcehash: raise ValueError('Workbook differs from the regression source')
     nodes,pairs,audit = readflows(workbookrows(args.input))
@@ -346,13 +348,13 @@ def main():
     print('Brewster-Pecos BC rank:',orders['bc'].index(bridge)+1,'of',graph.number_of_edges())
     print('Rank-1 BC edge:',orders['bc'][0],'; graph remains connected')
     for r in sweep: print('Sensitivity:',r['k'],r['n'],r['m'],r['components'],'components;',r['bridges'],'bridges; Big Bend connected',r['bigbendconnected'],'bridge-separated',r['bridgeseparated'])
-    with (root/'data/results/commutingresults.csv').open('w',newline='') as stream:
+    with (destination/'commutingresults.csv').open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=list(records[0]))
         writer.writeheader()
         for row in records: writer.writerow({k:json.dumps(v,separators=(',',':')) if isinstance(v,(dict,list,tuple)) else v for k,v in row.items()})
-    savedreports.save('commuting',report(graph,audit,data,stats,records,regions,sweep,orders,bc,bcw,args.input,args.adjacency))
+    savedreports.save('commuting',report(graph,audit,data,stats,records,regions,sweep,orders,bc,bcw,args.input,args.adjacency),directory=destination)
     print(f'Completed 16 exact optima and sensitivity sweep in {perf_counter()-start:.3f} seconds')
-    print('Wrote data/results/commutingresults.csv and data/records.json [commuting]')
+    print('Wrote',destination/'commutingresults.csv','and',destination/'commuting.txt')
 
 colorado = ('08003','08021','08023','08079','08105','08109')
 
@@ -554,7 +556,9 @@ def interpret():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input',type=Path,default=root/'data/raw/table1.xlsx')
     parser.add_argument('--adjacency',type=Path,default=adjacencypath)
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
     args = parser.parse_args()
+    destination = savedreports.prepare(args.output,('commutinginterpret.csv',),('commutinginterpret',))
     resultpath = root/'data/results/commutingresults.csv'
     if hashlib.sha256(args.input.read_bytes()).hexdigest()!=sourcehash: raise ValueError('Unexpected workbook')
     nodes,pairs,audit = readflows(workbookrows(args.input))
@@ -564,17 +568,17 @@ def interpret():
     regions = {c:structure(graph,c,geo,saved) for c in occurrences}
     sensitivity = sweep(nodes,pairs,geo)
     rows = records(graph,regions,occurrences,sensitivity)
-    with (root/'data/results/commutinginterpret.csv').open('w',newline='') as stream:
+    with (destination/'commutinginterpret.csv').open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=list(rows[0]))
         writer.writeheader()
         for row in rows: writer.writerow({k:json.dumps(v,separators=(',',':')) if isinstance(v,(dict,list,tuple)) else v for k,v in row.items()})
-    savedreports.save('commutinginterpret',regionreport(graph,regions,occurrences,cases,sensitivity,[args.input,resultpath,args.adjacency]))
+    savedreports.save('commutinginterpret',regionreport(graph,regions,occurrences,cases,sensitivity,[args.input,resultpath,args.adjacency]),directory=destination)
     for c,data in regions.items():
         print(f"{labels[c]}: {data['count']} counties, {data['commuters']} resident workers, internal flow {data['internalflow']}, boundary {data['boundarysize']} edges / {data['disruption']}, optimal in {len(occurrences[c])} cases")
     for row in sensitivity:
         print(f"k={row['k']}: induced sizes={sorted(map(len,row['data']['internalcomponents']),reverse=True)}, boundary={row['data']['boundarysize']} / {row['data']['disruption']}, original-cut Alamosa component={row['replay']['anchorsize']}")
     print(f'Validated {len(cases)} exact cases; wrote {len(rows)} region/objective records')
-    print('Wrote data/results/commutinginterpret.csv and data/records.json [commutinginterpret]')
+    print('Wrote',destination/'commutinginterpret.csv','and',destination/'commutinginterpret.txt')
 
 if __name__=='__main__':
     modes = {'--interpret':interpret}

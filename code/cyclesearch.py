@@ -1,5 +1,6 @@
 # Exact sparse-cycle comparisons and family checks
 import argparse
+import records as savedreports
 import csv
 import json
 from collections import defaultdict
@@ -279,6 +280,7 @@ def proactivecuts(rows):
     return dict(cases=cases,cuts=dict(counts))
 
 def search(unilimit=12,cactuslimit=11,ranklimit=10,output="data/cyclesearch.csv"):
+    savedreports.guard(output)
     start = perf_counter()
     atlas = nx.graph_atlas_g()
     groups = {n:[g for g in atlas if len(g)==n and nx.is_connected(g)] for n in range(3,8)}
@@ -302,7 +304,7 @@ def search(unilimit=12,cactuslimit=11,ranklimit=10,output="data/cyclesearch.csv"
                "density","bridges","articulations","girth","degree","eccentricity",
                "opt","thr","tbc","rhothr","rhotbc","proactive","seconds","optstates","thrstates"]
     Path(output).parent.mkdir(parents=True,exist_ok=True)
-    with open(output,"w",newline="") as stream:
+    with open(output,"x",newline="") as stream:
         writer = csv.DictWriter(stream,fieldnames=columns)
         writer.writeheader()
         def scan(graph,label,cohort,sources=None,expected=None):

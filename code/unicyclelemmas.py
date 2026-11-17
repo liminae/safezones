@@ -1,4 +1,5 @@
 # Structural checks for unicyclic threshold strategies
+import records as savedreports
 import csv
 import json
 from collections import Counter
@@ -268,9 +269,11 @@ def regression():
     assert cycledata(graph,0)["offset"]==2
     assert copycuts(graph,0,[(1,2)])["safe"]==[2,3,4]
 
-def search(output="data/unicyclelemmas.json"):
+def search(output="data/unicyclelemmas.json",source="data/cyclesearch.csv"):
+    savedreports.guard(output)
+    Path(output).parent.mkdir(parents=True,exist_ok=True)
     start = perf_counter()
-    with open("data/cyclesearch.csv",newline="") as stream:
+    with open(source,newline="") as stream:
         rows = [r for r in csv.DictReader(stream) if r["cohort"]=="exhaustive" and
                 r["rank"]=="1" and int(r["n"])<=12]
     assert len(rows)==89965 and len({r["label"] for r in rows})==7872
@@ -368,10 +371,17 @@ def search(output="data/unicyclelemmas.json"):
     for item in weightedfailures[:20]: print("WEIGHTED COUNTEREXAMPLE",json.dumps(item),flush=True)
     report = dict(unweighted=dict(counts),details=details,examples=examples,
                   weightedsummary=weightedsummary,weighted=stress,seconds=perf_counter()-start)
-    with open(output,"w") as stream: json.dump(report,stream,separators=(",",":"))
+    with open(output,"x") as stream: json.dump(report,stream,separators=(",",":"))
     print("OUTPUT",output,"BYTES",Path(output).stat().st_size,flush=True)
     print(f"TOTAL SECONDS {perf_counter()-start:.6f}",flush=True)
 
 if __name__=="__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output",default="data/unicyclelemmas.json")
+    parser.add_argument("--input",default="data/cyclesearch.csv")
+    parser.add_argument("--check",action="store_true")
+    args = parser.parse_args()
+    if not args.check: savedreports.guard(args.output)
     regression()
-    search()
+    if not args.check: search(args.output,args.input)

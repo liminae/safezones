@@ -406,7 +406,9 @@ def makereport(graph,audit,catalog,records,statistics,path,digest):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input',type=Path,default=root/'data/raw/t100_domestic_segment_2025.zip')
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
     args = parser.parse_args()
+    destination = savedreports.prepare(args.output,('airresults.csv',),('air',))
     start = perf_counter()
     digest = hashlib.sha256(args.input.read_bytes()).hexdigest()
     if digest!=sourcehash: raise ValueError('Input archive differs from the regression source')
@@ -423,15 +425,15 @@ def main():
     records,statistics,orders = analyze(graph,catalog)
     for row in records:
         print(f"{row['prior']}/{row['target']} b={row['budget']}: {row['exactdecimal']:.9f}; cuts={row['optimalcut']}; components={row['componentsizes']}; disrupted passengers={row['disruptedpassengers']}",flush=True)
-    with (root/'data/results/airresults.csv').open('w',newline='') as stream:
+    with (destination/'airresults.csv').open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=list(records[0]))
         writer.writeheader()
         for row in records:
             writer.writerow({k:json.dumps(v,separators=(',',':')) if isinstance(v,(dict,list,tuple)) else v for k,v in row.items()})
-    savedreports.save('air',makereport(graph,audit,catalog,records,statistics,args.input,digest))
+    savedreports.save('air',makereport(graph,audit,catalog,records,statistics,args.input,digest),directory=destination)
     print('Exact DP statistics:',json.dumps(statistics,sort_keys=True))
     print(f'Completed all 24 cardinality optima and secondary efficiency optimization in {perf_counter()-start:.3f} seconds')
-    print('Wrote data/results/airresults.csv and data/records.json [air]')
+    print('Wrote',destination/'airresults.csv','and',destination/'air.txt')
 
 if __name__=='__main__':
     main()

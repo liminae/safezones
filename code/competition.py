@@ -1,5 +1,6 @@
 # Competing bottleneck experiment and exact formulas
 import records as savedreports
+import argparse
 import csv
 import json
 from fractions import Fraction
@@ -99,8 +100,9 @@ def bestthreshold(rows):
 def interval(low,high):
     return f'(-infinity,{high})' if low is None else f'[{low},infinity)' if high is None else f'[{low},{high})'
 
-def write(rows):
-    with (root/'data/results/competition.csv').open('w',newline='') as stream:
+def write(rows,path=None):
+    path = Path(path) if path is not None else root/'data/results/competition.csv'
+    with path.open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=list(rows[0]))
         writer.writeheader()
         for row in rows:
@@ -185,11 +187,15 @@ def report(rows,times,seconds):
     return '\n'.join(lines)+'\n'
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
+    args = parser.parse_args()
+    destination = savedreports.prepare(args.output,('competition.csv',),('competition',))
     start = perf_counter()
     rows,times = experiment(progress=True)
-    write(rows)
+    write(rows,destination/'competition.csv')
     text = report(rows,times,perf_counter()-start)
-    savedreports.save('competition',text)
+    savedreports.save('competition',text,directory=destination)
     print(text,end='')
 
 proof = '''EXACT THEORY OF THE COMPETING BOTTLENECK CONSTRUCTION
@@ -494,9 +500,13 @@ def theoryreport(rows,checks):
     return '\n'.join(lines)+'\n'
 
 def theory():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
+    args = parser.parse_args()
+    destination = savedreports.prepare(args.output,(),('competitiontheory',))
     rows,checks = verify()
     text = theoryreport(rows,checks)
-    savedreports.save('competitiontheory',text)
+    savedreports.save('competitiontheory',text,directory=destination)
     print(text,end='')
     assert not any(checks[name] for name in ('formulaerrors','floaterrors','outcomeerrors','cuterrors'))
 
@@ -508,4 +518,5 @@ if __name__=='__main__':
     if selected: sys.argv.remove(selected[0])
     if '--help' in sys.argv or '-h' in sys.argv:
         print('Additional analysis modes: --theory')
+        action()
     else: action()

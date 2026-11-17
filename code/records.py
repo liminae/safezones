@@ -12,9 +12,34 @@ def text(name):
     return load()['reports'][name]
 def exists(name):
     return name in load()['reports']
-def save(name,value,exclusive=False):
+def guard(destination):
+    destination = Path(destination)
+    if destination.exists() or destination.is_symlink():
+        raise FileExistsError('Output already exists: '+str(destination)+'; use --output with a separate directory')
+    return destination
+def prepare(directory,files=(),reports=()):
+    destination = Path(directory) if directory is not None else root/'data/results'
+    for name in files: guard(destination/name)
+    for name in reports:
+        if directory is None:
+            raise FileExistsError('Published reports are read-only: '+str(path)+'; use --output with a separate directory')
+        guard(destination/(name+'.txt'))
+    destination.mkdir(parents=True,exist_ok=True)
+    return destination
+def cachefolder(directory):
+    destination = Path(directory).resolve()
+    if destination.is_relative_to(root.resolve()):
+        raise ValueError('Use a cache directory outside the repository')
+    return destination
+def save(name,value,exclusive=True,directory=None):
+    if directory is not None:
+        if Path(name).name!=name: raise ValueError('Report name must be a filename')
+        with (Path(directory)/(name+'.txt')).open('x') as stream: stream.write(value)
+        return
     saved = load()
-    if exclusive and name in saved['reports']: raise FileExistsError('Saved report exists: '+name)
+    if name in saved['reports']: raise FileExistsError('Saved report exists: '+name)
+    if path.resolve()==(root/'data/records.json').resolve():
+        raise FileExistsError('Published records are read-only; save to a separate directory')
     saved['reports'][name] = value
     path.write_text(json.dumps(saved,indent=2)+'\n')
 def data(name):
@@ -28,13 +53,12 @@ def verify(name,digest):
     rows = [r for r in load()['sources'] if r['previous']==name and r['previoussha256']==digest]
     assert len(rows)==1,(name,digest)
     row = rows[0]
-    assert hashlib.sha256((root/row['current']).read_bytes()).hexdigest()==row['currentsha256'],name
-def check():
-    saved = load()
+    assert hashlib.sha256((root/row['current']).read_bytes()).hexdigest()==revisions().get(row['current'],row['currentsha256']),name
+def revisions():
     current = {}
-    revisions = root/'figures/checks.json'
-    if revisions.exists():
-        revised = json.loads(revisions.read_text())
+    figures = root/'figures/checks.json'
+    if figures.exists():
+        revised = json.loads(figures.read_text())
         assert hashlib.sha256(path.read_bytes()).hexdigest()==revised['records'],'Historical records changed'
         current = revised['files']
         allowed = {'code/records.py','code/tests.py'}|{f'figures/fig{n}.{suffix}' for n in (7,8,9) for suffix in ('py','tex')}
@@ -42,8 +66,23 @@ def check():
         assert set(revised['reference'])=={f'figures/fig{n}.tex' for n in (7,8,9)}
         for name,digest in revised['reference'].items():
             assert current[name]==digest,name
-        for name,digest in current.items():
-            assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name
+    safety = root/'code/checks.json'
+    if safety.exists():
+        revised = json.loads(safety.read_text())
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==revised['records'],'Historical records changed'
+        assert hashlib.sha256(figures.read_bytes()).hexdigest()==revised['figures'],'Figure checks changed'
+        previous = {row['current']:row['currentsha256'] for row in load()['sources']}
+        previous.update(current)
+        for name,row in revised['files'].items():
+            assert Path(name).parent==Path('code') and Path(name).suffix=='.py','Unexpected safety revision path'
+            assert previous[name]==row['previous'],name
+            current[name] = row['current']
+    for name,digest in current.items():
+        assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name
+    return current
+def check():
+    saved = load()
+    current = revisions()
     for name,digest in saved['artifacts'].items():
         assert hashlib.sha256((root/name).read_bytes()).hexdigest()==current.get(name,digest),name
     for name,digest in saved['reporthashes'].items():

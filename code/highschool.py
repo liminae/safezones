@@ -6,7 +6,6 @@ import gzip
 import hashlib
 import json
 import math
-import tempfile
 from collections import Counter,defaultdict
 from datetime import datetime,timezone
 from fractions import Fraction
@@ -342,7 +341,7 @@ def sequentialrecords(graph,weights,prior,theta):
 
 def writecsv(path,rows):
     keys = list(dict.fromkeys(k for row in rows for k in row))
-    with path.open('w',newline='') as stream:
+    with path.open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=keys)
         writer.writeheader()
         for row in rows:
@@ -465,7 +464,9 @@ def report(audit,week,daily,thresholds,static,sequential,selection,limit,firstbr
               'Raw provenance: data/records.json [source:highschool]; SHA256 validated before analysis.']
     return '\n'.join(lines)+'\n'
 
-def plot():
+def plot(directory=None):
+    if directory is None: raise FileExistsError('Use --output with a separate directory for regenerated plots')
+    destination = savedreports.prepare(directory,tuple(name+'.'+suffix for name in ('contacts','thresholds','ratios') for suffix in ('pdf','png')))
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -479,12 +480,11 @@ def plot():
     thresholds = read('highschoolthresholds.csv')
     static = read('highschoolstatic.csv')
     sequential = read('highschoolsequential.csv')
-    destination = root/'figures/exploratory/highschool'
-    destination.mkdir(parents=True,exist_ok=True)
     def save(fig,name,caption):
         fig.text(.02,.01,caption,ha='left',va='bottom',fontsize=8,color='.3')
-        fig.savefig(destination/(name+'.pdf'),bbox_inches='tight')
-        fig.savefig(Path(tempfile.gettempdir())/('highschool-'+name+'.png'),dpi=160,bbox_inches='tight')
+        for suffix in ('pdf','png'):
+            with (destination/(name+'.'+suffix)).open('xb') as stream:
+                fig.savefig(stream,format=suffix,bbox_inches='tight',**({'dpi':160} if suffix=='png' else {}))
         plt.close(fig)
     weights = {r['left']:int(r['leftsize']) for r in edges}
     weights.update({r['right']:int(r['rightsize']) for r in edges})
@@ -548,15 +548,17 @@ def plot():
     ax.legend(frameon=False,ncol=3,fontsize=8,loc='upper center',bbox_to_anchor=(.5,-.2))
     fig.subplots_adjust(bottom=.35,left=.12,right=.98,top=.97)
     save(fig,'ratios','Connected graphs; student-prior-weighted means conditional on OPT>0. N counts eligible source classes.\nAll-zero baselines omitted; lines connect selected thresholds. The six production action rules are unchanged.')
-    print('Created three PDFs in figures/exploratory/highschool/')
+    print('Created three PDFs and PNGs in',destination)
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--plot',action='store_true')
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report or plots')
     args = parser.parse_args()
     if args.plot:
-        plot()
+        plot(args.output)
         return
+    destination = savedreports.prepare(args.output,tuple('highschool'+name+'.csv' for name in ('edges','thresholds','static','sequential')),('highschool',))
     import networkx as nx
     tick = perf_counter()
     weights,strengths,days,audit = readraw()
@@ -580,7 +582,7 @@ def main():
                    strongest=strongest,strongestseconds=values[strongest],highestbc=2*highest,highestbcedges=bestedges)
         daily.append(row)
         edges.extend(edgerecords(current,weights,day))
-    writecsv(root/'data/results/highschooledges.csv',edges)
+    writecsv(destination/'highschooledges.csv',edges)
     levels,limit,firstbridge,forest = thresholdlevels(weights,strengths)
     thresholds,static,sequential = [],[],[]
     connected = {}
@@ -601,11 +603,11 @@ def main():
     for theta in representatives:
         for name,distribution in allpriors.items():
             static.extend(staticrecords(connected[theta],weights,distribution,theta,1,'prior',name))
-    writecsv(root/'data/results/highschoolthresholds.csv',thresholds)
-    writecsv(root/'data/results/highschoolstatic.csv',static)
-    writecsv(root/'data/results/highschoolsequential.csv',sequential)
+    writecsv(destination/'highschoolthresholds.csv',thresholds)
+    writecsv(destination/'highschoolstatic.csv',static)
+    writecsv(destination/'highschoolsequential.csv',sequential)
     text = report(audit,week,daily,thresholds,static,sequential,selection,limit,firstbridge,forest,perf_counter()-tick)
-    savedreports.save('highschool',text)
+    savedreports.save('highschool',text,directory=destination)
     print('WROTE',len(edges),'edge rows,',len(thresholds),'thresholds,',len(static),'static rows,',len(sequential),'sequential rows',flush=True)
     print('CONNECTED LEVELS',len(connected),'largest theta',limit,'first bridges',firstbridge,'first forest',forest,flush=True)
     print('SECONDS',round(perf_counter()-tick,3),flush=True)

@@ -123,6 +123,7 @@ def signature(kind,graph,codehash):
 
 def worker(task):
     kind,value,inputpath,cache,codehash,limit = task
+    cache = savedreports.cachefolder(cache)
     start = perf_counter()
     if kind not in inputs:
         if kind=='commuting': inputs[kind] = commuting.readflows(commuting.workbookrows(inputpath))[:2]
@@ -144,14 +145,14 @@ def worker(task):
     if not reused: payload = analyze(kind,graph,B,limit)
     if not reused and all(r['status']=='exact' for r in payload['rows']):
         temporary = path.with_suffix('.'+str(os.getpid())+'.tmp')
-        temporary.write_text(json.dumps(payload,separators=(',',':')))
+        with temporary.open('x') as stream: json.dump(payload,stream,separators=(',',':'))
         temporary.replace(path)
     payload = decorate(payload,kind,Fraction(value),full,graph)
     payload.update(graphkey=key,reused=reused,seconds=perf_counter()-start)
     return kind,value,payload
 
 def writecsv(path,rows):
-    with Path(path).open('w',newline='') as stream:
+    with Path(path).open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=list(rows[0]))
         writer.writeheader()
         for row in rows:
@@ -290,11 +291,14 @@ def main():
     parser.add_argument('--workers',type=int,default=2)
     parser.add_argument('--cache',type=Path,default=Path(tempfile.gettempdir())/'safezones-sweeps')
     parser.add_argument('--limit',type=int,default=10000000)
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
     args = parser.parse_args()
+    destination = savedreports.prepare(args.output,('commutingsweep.csv', 'airsweep.csv'),('sweeps',))
     if args.workers<1 or args.limit<1: raise ValueError('Positive workers and search limit required')
     for path,digest in [(args.commuting_input,commuting.sourcehash),(args.air_input,air.sourcehash)]:
         if hashlib.sha256(path.read_bytes()).hexdigest()!=digest: raise ValueError('Unexpected input: '+str(path))
     codehash = hashlib.sha256(b''.join((root/'code'/name).read_bytes() for name in ('air.py','commuting.py','hospital.py'))).hexdigest()
+    args.cache = savedreports.cachefolder(args.cache)
     args.cache.mkdir(parents=True,exist_ok=True)
     tasks = [('commuting',str(k),str(args.commuting_input),str(args.cache),codehash,args.limit) for k in kappas()]
     tasks += [('air',str(t),str(args.air_input),str(args.cache),codehash,args.limit) for t in range(1,61)]
@@ -310,10 +314,10 @@ def main():
     anchors(results)
     for kind,filename in [('commuting','commutingsweep.csv'),('air','airsweep.csv')]:
         rows = [r for (k,v),p in sorted(results.items(),key=lambda item:Fraction(item[0][1])) if k==kind for r in p['rows']]
-        writecsv(root/'data/results'/filename,rows)
-    savedreports.save('sweeps',summary(results,[args.commuting_input,args.air_input],perf_counter()-start,codehash))
+        writecsv(destination/filename,rows)
+    savedreports.save('sweeps',summary(results,[args.commuting_input,args.air_input],perf_counter()-start,codehash),directory=destination)
     print('PASS kappa=1 and tau=1 reproduce all 40 original exact cases and all four baselines',flush=True)
-    print('Wrote data/results/commutingsweep.csv, data/results/airsweep.csv and data/records.json [sweeps]',flush=True)
+    print('Wrote',destination/'commutingsweep.csv',destination/'airsweep.csv','and',destination/'sweeps.txt',flush=True)
     incomplete = sum(r['status']!='exact' for p in results.values() for r in p['rows'])
     print(f'Completed {sum(len(p["rows"]) for p in results.values())} rows; incomplete exact rows={incomplete}; wall seconds={perf_counter()-start:.3f}')
     if incomplete: raise SystemExit(1)

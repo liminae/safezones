@@ -2415,7 +2415,35 @@ def testrecords():
             try: savedreports.check()
             except AssertionError: pass
             else: raise AssertionError('Figure revision tried to override an experimental input')
+            del manifest['files']['data/raw/extra.csv']
+            revisions.write_text(json.dumps(manifest))
+            item = root/'code/tests.py'
+            item.write_text('safety revision')
+            update = dict(records=hashlib.sha256(path.read_bytes()).hexdigest(),
+                          figures=hashlib.sha256(revisions.read_bytes()).hexdigest(),
+                          files={'code/tests.py':dict(previous=hashes['code/tests.py'],current=hashlib.sha256(item.read_bytes()).hexdigest())})
+            safety = root/'code/checks.json'
+            safety.write_text(json.dumps(update))
+            assert savedreports.check()==1
+            item.write_text('tampered revision')
+            try: savedreports.check()
+            except AssertionError: pass
+            else: raise AssertionError('Modified safety source was accepted')
+            item.write_text('safety revision')
+            for name in ('data/results/extra.csv','figures/fig7.tex','code/../data/extra.py'):
+                update['files'][name] = dict(previous='old',current='new')
+                safety.write_text(json.dumps(update))
+                try: savedreports.check()
+                except AssertionError: pass
+                else: raise AssertionError('Safety revision tried to override non-code artifacts')
+                del update['files'][name]
+            update['files']['code/tests.py']['previous'] = 'wrong predecessor'
+            safety.write_text(json.dumps(update))
+            try: savedreports.check()
+            except AssertionError: pass
+            else: raise AssertionError('Unverified safety revision predecessor was accepted')
     print('PASS separate figure revision checks reject changed figures, generators, tests, historical records and input overrides')
+    print('PASS source safety revisions preserve historical checks and reject tampering or non-code overrides')
     for name,entry in [('baselines','main'),('randomgraphs','main'),('transmission','main'),('population','main'),('livestock','main'),('washington','main'),('valley','main'),('livestock','directed')]:
         module = importlib.import_module(name)
         with patch.object(sys,'argv',[name+'.py']):
@@ -2429,6 +2457,109 @@ def testrecords():
         result = subprocess.run([sys.executable,'-B',str(root/'code'/(name+'.py')),mode,'--help'],capture_output=True,text=True)
         assert result.returncode==0 and mode in result.stdout,(name,mode,result.stdout,result.stderr)
     print('PASS every consolidated analysis mode exposes help without running an experiment')
+
+def testsafety():
+    import contextlib,hashlib,importlib,io,json,sys,tempfile
+    import records as savedreports
+    from unittest.mock import patch
+    root = Path(__file__).resolve().parent.parent
+    def snapshot():
+        return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest()
+                for folder in ('data','figures') for p in (root/folder).rglob('*') if p.is_file()}
+    def blocked(action):
+        try: action()
+        except FileExistsError as error: assert str(error)
+        else: raise AssertionError('Existing output was not protected')
+    before = snapshot()
+    entries = [('air','main',('airresults.csv',),'air'),
+               ('commuting','main',('commutingresults.csv',),'commuting'),
+               ('commuting','interpret',('commutinginterpret.csv',),'commutinginterpret'),
+               ('hospital','main',('hospitalresults.csv',),'hospital'),
+               ('hospital','interpret',('hospitalinterpret.csv',),'hospitalinterpret'),
+               ('hospital','cohorts',('hospitalcohorts.csv',),'hospitalcohorts'),
+               ('highschool','main',tuple('highschool'+s+'.csv' for s in ('edges','thresholds','static','sequential')),'highschool'),
+               ('competition','main',('competition.csv',),'competition'),
+               ('competition','theory',(),'competitiontheory'),
+               ('applicationsweeps','main',('commutingsweep.csv','airsweep.csv'),'sweeps')]
+    protected = [(name,entry) for name,entry,files,report in entries]
+    protected += [(name,'main') for name in ('baselines','randomgraphs','population','transmission','livestock','washington','valley')]
+    protected += [('livestock','directed')]
+    for name,entry in protected:
+        module = importlib.import_module(name)
+        with patch.object(sys,'argv',[name+'.py']), \
+             patch.object(module,'perf_counter',side_effect=AssertionError('Computation started before output checks')), \
+             patch.object(Path,'read_bytes',side_effect=AssertionError('Input loaded before output checks')):
+            blocked(getattr(module,entry))
+    print(f'PASS {len(protected)} default experiment/report entry points reject overwrites before input loading or computation')
+    for name,entry,files,report in entries:
+        module = importlib.import_module(name)
+        with tempfile.TemporaryDirectory() as directory:
+            destination = Path(directory)
+            for collision in (*files,report+'.txt'):
+                item = destination/collision
+                item.write_bytes(b'unchanged output')
+                with patch.object(sys,'argv',[name+'.py','--output',directory]), \
+                     patch.object(module,'perf_counter',side_effect=AssertionError('Computation started before output checks')), \
+                     patch.object(Path,'read_bytes',side_effect=AssertionError('Input loaded before output checks')):
+                    blocked(getattr(module,entry))
+                assert sorted(p.name for p in destination.iterdir())==[collision]
+                assert item.read_bytes()==b'unchanged output'
+                item.unlink()
+        with patch.object(sys,'argv',[name+'.py','--output',str(root/'data/results')]):
+            if files: blocked(getattr(module,entry))
+    print('PASS all CSV/report destination collisions are checked before computation, with no partial output files')
+    import applicationsweeps,competition,cyclesearch,highschool,unicyclelemmas
+    published = root/'data/results/competition.csv'
+    for action in (lambda: competition.write([],published),lambda: applicationsweeps.writecsv(published,[]),
+                   lambda: highschool.writecsv(published,[])):
+        blocked(action)
+    for module in (cyclesearch,unicyclelemmas):
+        with patch.object(module,'perf_counter',side_effect=AssertionError('Search started before output checks')):
+            blocked(lambda: module.search(output=published))
+    with patch.object(sys,'argv',['highschool.py','--plot']): blocked(highschool.main)
+    with tempfile.TemporaryDirectory() as directory:
+        destination = Path(directory)
+        (destination/'ratios.png').write_bytes(b'existing plot')
+        with patch.object(sys,'argv',['highschool.py','--plot','--output',directory]): blocked(highschool.main)
+        assert [p.name for p in destination.iterdir()]==['ratios.png']
+        assert (destination/'ratios.png').read_bytes()==b'existing plot'
+    print('PASS low-level CSV writers, exploratory searches and optional plots protect existing outputs')
+    for exclusive in (False,True):
+        blocked(lambda: savedreports.save('air','replacement',exclusive=exclusive))
+    blocked(lambda: savedreports.save('new-safety-report','new report'))
+    with tempfile.TemporaryDirectory() as directory:
+        destination = Path(directory)
+        link = destination/'link.csv'
+        link.symlink_to(destination/'missing.csv')
+        blocked(lambda: savedreports.guard(link))
+        alias = destination/'published'
+        alias.symlink_to(root/'data/results',target_is_directory=True)
+        blocked(lambda: savedreports.prepare(alias,('competition.csv',)))
+        fresh = savedreports.prepare(destination/'fresh',('competition.csv',),('competition',))
+        competition.write([dict(case='fixture',value='3/2')],fresh/'competition.csv')
+        savedreports.save('competition','Independent report',directory=fresh)
+        assert (fresh/'competition.txt').read_text()=='Independent report'
+        blocked(lambda: competition.write([],fresh/'competition.csv'))
+        blocked(lambda: savedreports.save('competition','replacement',directory=fresh))
+        race = savedreports.prepare(destination/'race',('rows.csv',))/'rows.csv'
+        race.write_bytes(b'created after preflight')
+        blocked(lambda: applicationsweeps.writecsv(race,[dict(value=0)]))
+        assert race.read_bytes()==b'created after preflight'
+        with patch.object(sys,'argv',['competition.py','--output',str(destination/'regenerated')]), \
+             patch.object(competition,'experiment',return_value=([dict(case='fixture',value='3/2')],[])) as compute, \
+             patch.object(competition,'report',return_value='Separate report'),contextlib.redirect_stdout(io.StringIO()):
+            competition.main()
+            assert compute.call_count==1
+        assert (destination/'regenerated/competition.txt').read_text()=='Separate report'
+        assert '3/2' in (destination/'regenerated/competition.csv').read_text()
+        for folder in (root/'data',root/'code',root/'figures',alias):
+            try: savedreports.cachefolder(folder)
+            except ValueError: pass
+            else: raise AssertionError('Cache was allowed inside the repository')
+        assert savedreports.cachefolder(destination/'cache')==(destination/'cache').resolve()
+    print('PASS separate regeneration, report exclusivity, late collisions, symlinks and cache isolation')
+    assert snapshot()==before
+    print(f'PASS all {len(before)} data and figure files remain byte-for-byte unchanged after failed writes and isolated regeneration')
 
 CASES = {
     'core':main,
@@ -2447,6 +2578,7 @@ CASES = {
     'figure9':testfigure9,
     'valley':testvalley,
     'records':testrecords,
+    'safety':testsafety,
 }
 
 def suite():

@@ -247,7 +247,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input',type=Path,default=root/'data/raw/hospital_lyon_contacts.dat.gz')
     parser.add_argument('--budget',type=int,default=4)
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
     args = parser.parse_args()
+    destination = savedreports.prepare(args.output,('hospitalresults.csv',),('hospital',))
     if args.budget<2: parser.error('The application regression requires maximum budget at least 2')
     digest = hashlib.sha256(args.input.read_bytes()).hexdigest()
     if digest!=sourcehash: raise ValueError('Raw hospital file does not match the documented SHA256')
@@ -317,8 +319,7 @@ def main():
                         record[method+'removededges'] = details(graph,chosen)
                         record[method+'removedduration'] = sum(graph.edges[e]['duration'] for e in chosen)
                     records.append(record)
-    destination = root/'data/results/hospitalresults.csv'
-    with destination.open('w',newline='') as stream:
+    with (destination/'hospitalresults.csv').open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=list(records[0]))
         writer.writeheader()
         for row in records:
@@ -345,14 +346,14 @@ def main():
              '', 'REPRODUCE',
              'PYTHONDONTWRITEBYTECODE=1 python code/tests.py hospital',
              'PYTHONDONTWRITEBYTECODE=1 python code/hospital.py']
-    savedreports.save('hospital','\n'.join(lines)+'\n')
+    savedreports.save('hospital','\n'.join(lines)+'\n',directory=destination)
     print('graph | prior/target | exact b=1,2,3,4 (up to requested budget)',flush=True)
     for name in graphs:
         for pname in ('uniform','HCW','PAT'):
             for aname in ('all','PAT'):
                 values = [r['exact'] for r in records if (r['graph'],r['prior'],r['target'])==(name,pname,aname)]
                 print(name,pname+'/'+aname,' | '.join(values),flush=True)
-    print('Wrote',len(records),'rows to data/results/hospitalresults.csv and data/records.json [hospital]',flush=True)
+    print('Wrote',len(records),'rows to',destination/'hospitalresults.csv','and',destination/'hospital.txt',flush=True)
 
 roleorder = ('PAT','NUR','MED','ADM')
 
@@ -687,15 +688,19 @@ def makereport(records,graphs,catalogs,ranks,digest):
     return '\n'.join(lines)+'\n'
 
 def interpret():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
+    args = parser.parse_args()
+    destination = savedreports.prepare(args.output,('hospitalinterpret.csv',),('hospitalinterpret',))
     records,graphs,catalogs,ranks,digest = analyze()
-    csvpath = root/'data/results/hospitalinterpret.csv'
-    with csvpath.open('w',newline='') as stream:
+    csvpath = destination/'hospitalinterpret.csv'
+    with csvpath.open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=list(records[0]))
         writer.writeheader()
         for record in records:
             writer.writerow({k:json.dumps(v,separators=(',',':')) if isinstance(v,(dict,list,tuple)) else v for k,v in record.items()})
     text = makereport(records,graphs,catalogs,ranks,digest)
-    savedreports.save('hospitalinterpret',text)
+    savedreports.save('hospitalinterpret',text,directory=destination)
     print('Verified all 96 saved cases; enumerated every optimal partition and boundary cut')
     print('Exact original-edge-set counts include redundant cuts; large families are represented compactly')
     print('Optimal multi-person non-giant cases:',sum(r['multipersonpartitions']>0 for r in records))
@@ -704,7 +709,7 @@ def interpret():
         rows = [r for r in records if r['graph']==name and r['prior']=='uniform' and r['target']=='all']
         print(name,'uniform/all: (b, optimal partitions, all optimal edge sets)',
               [(r['budget'],r['optimalpartitions'],r['optimaledgesets']) for r in rows])
-    print('Wrote data/results/hospitalinterpret.csv and data/records.json [hospitalinterpret]')
+    print('Wrote',csvpath,'and',destination/'hospitalinterpret.txt')
 
 resolutions = (.75,1.,1.25,1.5)
 
@@ -1029,14 +1034,18 @@ def cohortreport(records,graphs,runs,searches,audit,seconds):
     return '\n'.join(lines)+'\n'
 
 def cohorts():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,help='Separate directory for new results and report')
+    args = parser.parse_args()
+    destination = savedreports.prepare(args.output,('hospitalcohorts.csv',),('hospitalcohorts',))
     records,graphs,runs,searches,audit,seconds = analyzecohorts()
-    path = root/'data/results/hospitalcohorts.csv'
-    with path.open('w',newline='') as stream:
+    path = destination/'hospitalcohorts.csv'
+    with path.open('x',newline='') as stream:
         writer = csv.DictWriter(stream,fieldnames=list(records[0]))
         writer.writeheader()
         for r in records:
             writer.writerow({k:json.dumps(v,separators=(',',':')) if isinstance(v,(list,dict,tuple)) else v for k,v in r.items()})
-    savedreports.save('hospitalcohorts',cohortreport(records,graphs,runs,searches,audit,seconds))
+    savedreports.save('hospitalcohorts',cohortreport(records,graphs,runs,searches,audit,seconds),directory=destination)
     pair = next(r for r in records if r['graph']=='night' and r['ids']==(1460,1784))
     print('PASS night pair: 2 PAT; internal180s; boundary4 edges/200s; components',pair['evaluation']['componentsizes'])
     print('Pair stability:',json.dumps(pair['stability']['byresolution']))
@@ -1053,5 +1062,5 @@ if __name__=='__main__':
     if selected: sys.argv.remove(selected[0])
     if '--help' in sys.argv or '-h' in sys.argv:
         print('Additional analysis modes: --interpret, --cohorts')
-        if action in (main,): action()
+        action()
     else: action()
