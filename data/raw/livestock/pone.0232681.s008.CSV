@@ -1,0 +1,263 @@
+id,name,country,cid
+n001,Gogounou,Benin,c001
+n002,Fada N'Gourma,Burkina Faso,c002
+n003,Parakou,Benin,c001
+n004,Tourou,Benin,c001
+n005,Paga,Ghana,c004
+n006,Ashaiman,Ghana,c004
+n007,Namoo,Ghana,c004
+n008,Cinkasse,Togo,c010
+n009,Kumasi,Ghana,c004
+n010,Doropo,Cote d'Ivoire,c003
+n011,Leo,Burkina Faso,c002
+n012,Bolgatanga,Ghana,c004
+n013,Bobo-Dioulasso,Burkina Faso,c002
+n014,Po,Burkina Faso,c002
+n015,Manga,Burkina Faso,c002
+n016,Bawku,Ghana,c004
+n017,Tumu,Ghana,c004
+n018,Fara,Burkina Faso,c002
+n019,Tita,Burkina Faso,c002
+n020,Tougan,Burkina Faso,c002
+n021,Kossodo,Burkina Faso,c002
+n022,Sapouy,Burkina Faso,c002
+n023,Yeguere,Burkina Faso,c002
+n024,Kaya,Burkina Faso,c002
+n025,Pissila,Burkina Faso,c002
+n026,Tanghin,Burkina Faso,c002
+n027,Kongoussi,Burkina Faso,c002
+n028,Djibo,Burkina Faso,c002
+n029,Gourcy,Burkina Faso,c002
+n030,Kalsaka,Burkina Faso,c002
+n031,Thiou,Burkina Faso,c002
+n032,Koupela,Burkina Faso,c002
+n033,Zawara,Burkina Faso,c002
+n034,Ouahigouya,Burkina Faso,c002
+n035,Nouna,Burkina Faso,c002
+n036,Bittou,Burkina Faso,c002
+n037,Pouytenga,Burkina Faso,c002
+n038,Koura,Burkina Faso,c002
+n039,Tanwalbougou,Burkina Faso,c002
+n040,Djibasso,Burkina Faso,c002
+n041,Hounde,Burkina Faso,c002
+n042,Yako,Burkina Faso,c002
+n043,Diebougou,Burkina Faso,c002
+n044,Abalak,Niger,c007
+n045,Bande,Niger,c007
+n046,Beguedo,Burkina Faso,c002
+n047,Bena,Burkina Faso,c002
+n048,Oume,Cote d'Ivoire,c003
+n049,Man,Cote d'Ivoire,c003
+n050,San Pedro,Cote d'Ivoire,c003
+n051,Aguie,Niger,c007
+n052,Ayorou,Niger,c007
+n053,Atchilahia,Niger,c007
+n054,Badegucheri,Niger,c007
+n055,Bakin Birdji,Niger,c007
+n056,Barani,Burkina Faso,c002
+n057,Birnin Konni,Niger,c007
+n058,Bogande,Burkina Faso,c002
+n059,Batchaka,Niger,c007
+n060,Boromo,Burkina Faso,c002
+n061,Boula,Niger,c007
+n062,Bousouma,Burkina Faso,c002
+n063,Buipe,Ghana,c004
+n064,Dakoro,Niger,c007
+n065,Dan Issa,Niger,c007
+n066,Dan Barto,Niger,c007
+n067,Guidan Dan Douma,Niger,c007
+n068,Dande,Burkina Faso,c002
+n069,Dedougou,Burkina Faso,c002
+n070,Derassi,Benin,c001
+n071,Diapaga,Burkina Faso,c002
+n072,Doulougou,Burkina Faso,c002
+n073,Doungas,Niger,c007
+n074,Droum Malori,Niger,c007
+n075,Fielmon,Ghana,c004
+n076,Gao-BFA,Burkina Faso,c002
+n077,Gao-NER,Niger,c007
+n078,Garu,Ghana,c004
+n079,Gazaoua,Niger,c007
+n080,Goughin,Burkina Faso,c002
+n081,Goure,Niger,c007
+n082,Gaidan Ider,Niger,c007
+n083,Guidan Tanko,Niger,c007
+n084,Guidiguir,Niger,c007
+n085,Hamile,Ghana,c004
+n086,Issawan,Niger,c007
+n087,Iyatawa,Nigeria,c008
+n088,Dankama,Nigeria,c008
+n089,Jibia,Nigeria,c008
+n090,Ipelce,Burkina Faso,c002
+n091,Kaibo,Burkina Faso,c002
+n092,Kakou,Niger,c007
+n093,Kargueri,Niger,c007
+n094,Kantchari,Burkina Faso,c002
+n095,Kantche,Niger,c007
+n096,Kasama,Niger,c007
+n097,Kassoum,Burkina Faso,c002
+n098,Birnin Kazoe,Niger,c007
+n099,Kiembara,Burkina Faso,c002
+n100,Kombissiri,Burkina Faso,c002
+n101,Katurje,Nigeria,c008
+n102,Kossouka,Burkina Faso,c002
+n103,Kouere,Burkina Faso,c002
+n104,Kouka,Burkina Faso,c002
+n105,Lome,Togo,c010
+n106,Loropeni,Burkina Faso,c002
+n107,Magaria,Niger,c007
+n108,Guidan Kane,Niger,c007
+n109,Manni,Burkina Faso,c002
+n110,Maradi,Niger,c007
+n111,Matameye,Niger,c007
+n112,Matiakoali,Burkina Faso,c002
+n113,Mayahi,Niger,c007
+n114,Mokko,Niger,c007
+n115,Namounou,Burkina Faso,c002
+n116,Niangoloko,Burkina Faso,c002
+n117,Ouagadougou,Burkina Faso,c002
+n118,Nadiagou,Burkina Faso,c002
+n119,Pa,Burkina Faso,c002
+n120,Poni,Burkina Faso,c002
+n121,Poura,Burkina Faso,c002
+n122,Pusiga,Ghana,c004
+n123,Rollo,Burkina Faso,c002
+n124,Sabonmashi,Niger,c007
+n125,Seguenega,Burkina Faso,c002
+n126,Solenzo,Burkina Faso,c002
+n127,Soubdou,Niger,c007
+n128,Tanout,Niger,c007
+n129,Takanamat,Niger,c007
+n130,Damagaram Takaya,Niger,c007
+n131,Zinder,Niger,c007
+n132,Zini,Ghana,c004
+n133,Yelwongo,Burkina Faso,c002
+n134,Yaya,Niger,c007
+n135,Yamba,Burkina Faso,c002
+n136,Agawa,Niger,c007
+n137,Tougo,Burkina Faso,c002
+n138,Toma,Burkina Faso,c002
+n139,Toeni,Burkina Faso,c002
+n140,Torodi,Niger,c007
+n141,To,Burkina Faso,c002
+n142,Titao,Burkina Faso,c002
+n143,Tiebele,Burkina Faso,c002
+n144,Tessaoua,Niger,c007
+n145,Tera,Niger,c007
+n146,Tesker,Niger,c007
+n147,Tenkodogo,Burkina Faso,c002
+n148,Djougou,Benin,c001
+n149,Tchadoua,Niger,c007
+n150,Abengourou,Cote d'Ivoire,c003
+n151,Abidjan,Cote d'Ivoire,c003
+n152,Accra,Ghana,c004
+n153,Tanguieta,Benin,c001
+n154,Sokoto,Nigeria,c008
+n155,Sokode,Togo,c010
+n156,Sinfra,Cote d'Ivoire,c003
+n157,Sikenssi,Cote d'Ivoire,c003
+n158,Seguela,Cote d'Ivoire,c003
+n159,Olodo,Nigeria,c008
+n160,Nikki,Benin,c001
+n161,Niamey,Niger,c007
+n162,Natitingou,Benin,c001
+n163,Nafadji,Guinea,c005
+n164,Meagui,Cote d'Ivoire,c003
+n165,Maigatari,Nigeria,c008
+n166,Maiadua,Nigeria,c008
+n167,Ilesa,Nigeria,c008
+n168,Machi,Nigeria,c008
+n169,Lagos,Nigeria,c008
+n170,Kontagora,Nigeria,c008
+n171,Kintampo,Ghana,c004
+n172,Kibiya,Nigeria,c008
+n173,Katsina,Nigeria,c008
+n174,Kano,Nigeria,c008
+n175,Kankan,Guinea,c005
+n176,Kangiwa,Nigeria,c008
+n177,Ilela,Nigeria,c008
+n178,Gujungu,Nigeria,c008
+n179,Godabawa,Nigeria,c008
+n180,Gaya,Niger,c007
+n181,Gagnoa,Cote d'Ivoire,c003
+n182,Faradamani,Guinea,c005
+n183,Duekoue,Cote d'Ivoire,c003
+n184,Doumega,Nigeria,c008
+n185,Diankana,Guinea,c005
+n186,Danane,Cote d'Ivoire,c003
+n187,Daloa,Cote d'Ivoire,c003
+n188,Cotonou,Benin,c001
+n189,Conakry,Guinea,c005
+n190,Boukari,Burkina Faso,c002
+n191,Bouake,Cote d'Ivoire,c003
+n192,Bouafle,Cote d'Ivoire,c003
+n193,Bembetakoura,Guinea,c005
+n194,Bello,Nigeria,c008
+n195,Balla,Nigeria,c008
+n196,Amagoro,Nigeria,c008
+n197,Adam,Nigeria,c008
+n198,Binde,Burkina Faso,c002
+n199,Adare,Niger,c007
+n200,Aderbissnat,Niger,c007
+n201,Alhazai,Niger,c007
+n202,Baleyara,Niger,c007
+n203,Bama,Burkina Faso,c002
+n204,Garin Sarki,Niger,c007
+n205,Sanam,Niger,c007
+n206,Sandema,Ghana,c004
+n207,Sapone,Burkina Faso,c002
+n208,Takieta,Niger,c007
+n209,Tamale,Ghana,c004
+n210,Tchake,Niger,c007
+n211,Tema,Burkina Faso,c002
+n212,Dakola,Burkina Faso,c002
+n213,Kangaba,Mali,c006
+n214,Kayes,Mali,c006
+n215,Kouremale,Mali,c006
+n217,Narena,Mali,c006
+n218,Siekorole,Mali,c006
+n219,Zegoua,Mali,c006
+n220,N'Douci,Cote d'Ivoire,c003
+n221,Soubre,Cote d'Ivoire,c003
+n222,Birnin Kebbi,Nigeria,c008
+n223,Bohicon,Benin,c001
+n224,Demba Ba,Senegal,c009
+n225,Divo,Cote d'Ivoire,c003
+n226,Grand-Bereby,Cote d'Ivoire,c003
+n227,Magama,Nigeria,c008
+n228,Makalondi,Niger,c007
+n229,Port Bouet,Cote d'Ivoire,c003
+n230,Save,Benin,c001
+n231,Navrongo,Ghana,c004
+n232,Siguiri,Guinea,c005
+n233,Zuenoula,Cote d'Ivoire,c003
+n234,Zamfara,Nigeria,c008
+n235,Yola,Nigeria,c008
+n236,Yamoussoukro,Cote d'Ivoire,c003
+n237,Vavoua,Cote d'Ivoire,c003
+n238,Tonbonto,Guinea,c005
+n239,Tiassale,Cote d'Ivoire,c003
+n240,Techiman,Ghana,c004
+n241,Tambado,Guinea,c005
+n242,Tai,Cote d'Ivoire,c003
+n243,Sabon Birni,Nigeria,c008
+n244,Sakoira,Niger,c007
+n245,Cheranchi,Nigeria,c008
+n246,Alidou-Koara,Niger,c007
+n247,Mahamadi,Burkina Faso,c002
+n248,Daura,Nigeria,c008
+n251,Diboli,Mali,c006
+n253,Wa,Ghana,c004
+n254,Pita,Nigeria,c008
+n255,Ouenra,Benin,c001
+n256,Mognori,Ghana,c004
+n257,Malam Dawey,Nigeria,c008
+n258,Mairere,Nigeria,c008
+n259,Kundumawa,Niger,c007
+n260,Kalba,Ghana,c004
+n261,Jan Birji,Niger,c007
+n262,Goro,Burkina Faso,c002
+n264,Gumke Gari,Nigeria,c008
+n265,Gassan,Burkina Faso,c002
+n267,Bomborokuy,Burkina Faso,c002
+n268,Lafiala,Mali,c006

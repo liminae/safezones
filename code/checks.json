@@ -1,0 +1,46 @@
+{
+  "records": "7922207c9756321d3531f7254a0da5fd8af12b67be7c6cfcd1843b2aafedd395",
+  "figures": "37010fa122a0a3df73ccea0862aeae9eb44016a288fc828b9cace77e390d382f",
+  "files": {
+    "code/air.py": {
+      "previous": "178cf76fac60a72a521ca694881670f73218a6134b67607802f4f618f8a19023",
+      "current": "51e1f3a90da3a60f7d620ae931314a05acbdb2a20be6935de49a0bc1976c3203"
+    },
+    "code/applicationsweeps.py": {
+      "previous": "f495e2446184da95d4c7ce62e0ad1320aa01c3ed1e6c03bfdbd1dd9810011b6f",
+      "current": "a6219ebd320b5215efbdd282084a28863a1844bb41590ba85e94733a52828921"
+    },
+    "code/commuting.py": {
+      "previous": "e2ea7015784f436ea53ed01fe83c1855812fc2de1a0bc6896c56fe96a178b814",
+      "current": "2d9d37b15aff7a28255bcae9864b2c580cbce4cd74c569de1c55d9fabea56991"
+    },
+    "code/competition.py": {
+      "previous": "8e105ae7b79fc29a236d49d8bc307bde0407426ea4f102ee5b4d72ec9edd9b26",
+      "current": "3cdb14463970427b3d3e39dc1df5f5940e23c7fa47ee6a43d9b33328101126cc"
+    },
+    "code/cyclesearch.py": {
+      "previous": "b0611eef7f851912896b2fcececf29998dfcb6226b08bd202d3ab723ed7efcea",
+      "current": "3bec2a872700818a4979d90a6ad7abd57c0c03a7f81e1ee33841d13bd96da0b2"
+    },
+    "code/highschool.py": {
+      "previous": "d877f5aef93e4bd13827591392cb03c13c87aa247634d84d475461747619a3e8",
+      "current": "e6ec9a677ffa3d1ff0516ad66308cfdee1615db6a2fc85c0ea64b1f28422dc51"
+    },
+    "code/hospital.py": {
+      "previous": "44f1c9f3c681dc7a1096773fbc4413ae02d405e04695d17d500b0b630b82e9be",
+      "current": "85fbacdedff040f2f08bc2c62096bacdfeb64443577a330569df854d8be370cf"
+    },
+    "code/records.py": {
+      "previous": "11d1ebdce96c27a09d26da4e0f03df70ac9ce029c46756b10b61643623d59cad",
+      "current": "a2b9e4e3d663bd8781460b7b31858233ef9ec0038816ea6a53c706e9245080bc"
+    },
+    "code/tests.py": {
+      "previous": "33b6493babbfda9d71dabc028e086380e0ace94a003ef78ee58ed141bba85270",
+      "current": "e16b95bb919b266e1c153b94ca6c696f06459fab75b31a6161f805e0091d6391"
+    },
+    "code/unicyclelemmas.py": {
+      "previous": "36df135582f956e9f12edbcf5dcb4d3ff223113116a9924a1fa291a49e30a9ad",
+      "current": "87572661c2c012355df4d26cd5af8c0418d25b4dd0030eb46642bc69f8499dbc"
+    }
+  }
+}

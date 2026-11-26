@@ -1,0 +1,20 @@
+{
+  "archive": "safezones_final_figures_for_codex.zip",
+  "archivesha256": "4308659e8dbe87ba1fafee303a9fa59b3f80ebb02b19d14ea1ec56e0e8bd4c58",
+  "records": "7922207c9756321d3531f7254a0da5fd8af12b67be7c6cfcd1843b2aafedd395",
+  "reference": {
+    "figures/fig7.tex": "8dd1003df65a4e109b80150884958710bd2593535f78cb69e6274cf1c47e5638",
+    "figures/fig8.tex": "52af0a9fc1629e785b4688693e297ae22e50b4e53fdcf8ac4e747a69b02a018d",
+    "figures/fig9.tex": "a7e44dd5d4fb800c37e7583b202b7290fd1a0603165dcb2ff6a91961095e625d"
+  },
+  "files": {
+    "code/records.py": "11d1ebdce96c27a09d26da4e0f03df70ac9ce029c46756b10b61643623d59cad",
+    "code/tests.py": "33b6493babbfda9d71dabc028e086380e0ace94a003ef78ee58ed141bba85270",
+    "figures/fig7.py": "ea9fb997e28e98db482734fb62e9b6b8a1eb71eeb414d6f4a6649d7061eafb4b",
+    "figures/fig7.tex": "8dd1003df65a4e109b80150884958710bd2593535f78cb69e6274cf1c47e5638",
+    "figures/fig8.py": "0fc0b1433e449d5ae7aea135a47f9f2ab65c8e8a208d3ebb1295df66990a1617",
+    "figures/fig8.tex": "52af0a9fc1629e785b4688693e297ae22e50b4e53fdcf8ac4e747a69b02a018d",
+    "figures/fig9.py": "46ece0ac05a89b2997ec1057b8a161c3c728a2eb7d1b316c5cf9e9044d709def",
+    "figures/fig9.tex": "a7e44dd5d4fb800c37e7583b202b7290fd1a0603165dcb2ff6a91961095e625d"
+  }
+}

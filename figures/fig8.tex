@@ -1,0 +1,151 @@
+\resizebox{0.98\columnwidth}{!}{
+\begin{tikzpicture}[x=1.25cm,y=0.62cm,font=\small]
+
+\definecolor{fail}{RGB}{225,194,177}
+\definecolor{succ}{RGB}{188,204,224}
+
+\newcommand{\tile}[3]{
+\path[fill=#1,draw=white,line width=0.4pt]
+(#2-1,#3-1) rectangle (#2,#3);
+}
+
+\begin{scope}[shift={(0,19.15)}]
+\def\legy{0.32}
+
+\def\cA{0.95}
+\def\cB{2.50}
+\def\cC{4.05}
+
+\draw[fill=fail,draw=black!60,line width=0.35pt]
+(\cA-0.42,\legy-0.12) rectangle (\cA-0.10,\legy+0.12);
+\node[anchor=west,font=\scriptsize] at (\cA,\legy) {Fail};
+
+\draw[fill=succ,draw=black!60,line width=0.35pt]
+(\cB-0.52,\legy-0.12) rectangle (\cB-0.20,\legy+0.12);
+\node[anchor=west,font=\scriptsize] at (\cB-0.10,\legy) {Succeed};
+
+\draw[black,line width=0.8pt] (\cC-0.45,\legy) -- (\cC-0.05,\legy);
+\node[anchor=west,font=\scriptsize] at (\cC+0.05,\legy) {Theory};
+\end{scope}
+
+\begin{scope}[shift={(0,10.55)}]
+
+\node[anchor=center,font=\small] at (-1.05,7.55) {(a)};
+\node[anchor=center,font=\small] at (2.5,7.55) {Family A};
+
+\tile{fail}{1}{1}
+\foreach \r in {2,...,7} {\tile{succ}{1}{\r}}
+
+\foreach \r in {1,2,3} {\tile{fail}{2}{\r}}
+\foreach \r in {4,...,7} {\tile{succ}{2}{\r}}
+
+\foreach \r in {1,2,3,4} {\tile{fail}{3}{\r}}
+\foreach \r in {5,6,7} {\tile{succ}{3}{\r}}
+
+\foreach \r in {1,2,3,4} {\tile{fail}{4}{\r}}
+\foreach \r in {5,6,7} {\tile{succ}{4}{\r}}
+
+\foreach \r in {1,2,3,4,5} {\tile{fail}{5}{\r}}
+\foreach \r in {6,7} {\tile{succ}{5}{\r}}
+
+\draw[black!70,line width=0.5pt] (0,0) rectangle (5,7);
+
+\foreach \x/\lab in {
+0.5/12,
+1.5/16,
+2.5/20,
+3.5/24,
+4.5/30
+}{
+\node[anchor=north,font=\scriptsize] at (\x,-0.22) {\lab};
+}
+
+\foreach \y/\lab in {
+0.5/3,
+1.5/4,
+2.5/5,
+3.5/6,
+4.5/8,
+5.5/10,
+6.5/12
+}{
+\node[anchor=east,font=\scriptsize] at (-0.18,\y) {\lab};
+}
+
+\node[anchor=north,font=\small] at (2.5,-0.78) {Block Size $m$};
+\node[rotate=90,anchor=south,font=\small] at (-0.72,3.5) {Gateway $h$};
+
+\draw[black,line width=0.8pt]
+(0,1) --
+(1,1) --
+(1,3) --
+(2,3) --
+(2,4) --
+(4,4) --
+(4,5) --
+(5,5);
+
+\end{scope}
+
+\begin{scope}[shift={(0,0)}]
+
+\node[anchor=center,font=\small] at (-1.05,7.55) {(b)};
+\node[anchor=center,font=\small] at (2.5,7.55) {Family B};
+
+\foreach \r in {1,...,7} {\tile{succ}{1}{\r}}
+
+\foreach \r in {1,2} {\tile{fail}{2}{\r}}
+\foreach \r in {3,...,7} {\tile{succ}{2}{\r}}
+
+\foreach \r in {1,2,3} {\tile{fail}{3}{\r}}
+\foreach \r in {4,...,7} {\tile{succ}{3}{\r}}
+
+\foreach \r in {1,2,3,4} {\tile{fail}{4}{\r}}
+\foreach \r in {5,6,7} {\tile{succ}{4}{\r}}
+
+\foreach \r in {1,2,3,4,5} {\tile{fail}{5}{\r}}
+\foreach \r in {6,7} {\tile{succ}{5}{\r}}
+
+\draw[black!70,line width=0.5pt] (0,0) rectangle (5,7);
+
+\foreach \x/\lab in {
+0.5/12,
+1.5/16,
+2.5/20,
+3.5/24,
+4.5/30
+}{
+\node[anchor=north,font=\scriptsize] at (\x,-0.22) {\lab};
+}
+
+\foreach \y/\lab in {
+0.5/4,
+1.5/5,
+2.5/6,
+3.5/7,
+4.5/8,
+5.5/10,
+6.5/12
+}{
+\node[anchor=east,font=\scriptsize] at (-0.18,\y) {\lab};
+}
+
+\node[anchor=north,font=\small] at (2.5,-0.78) {Block Size $m$};
+\node[rotate=90,anchor=south,font=\small] at (-0.72,3.5) {Gateway $h$};
+
+\draw[black,line width=0.8pt]
+(0,0) --
+(1,0) --
+(1,2) --
+(2,2) --
+(2,3) --
+(3,3) --
+(3,4) --
+(4,4) --
+(4,5) --
+(5,5);
+
+\end{scope}
+
+\end{tikzpicture}
+}
